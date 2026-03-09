@@ -41,12 +41,12 @@ const ProductFormLayer = () => {
     "metaDescription": "",
     "attributes": [],
     "specifications": [
-        {
-            "key": "",
-            "value": ""
-        }
+      {
+        "key": "",
+        "value": ""
+      }
     ]
-});
+  });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -106,7 +106,13 @@ const ProductFormLayer = () => {
 
   const fetchAttributes = async () => {
     const res = await AttributeApi.getAll(0, 1000, "");
-    if (res.status && res.response.data) setAttributeOptions(res.response.data.map(c => ({ value: c._id, label: c.name })));
+    if (res.status && res.response.data) {
+      setAttributeOptions(res.response.data.map(attr => ({
+        value: attr._id,
+        label: attr.name,
+        rawValues: attr.value // Keeping the original values string/array
+      })));
+    }
   };
 
   const fetchDetails = async () => {
@@ -154,7 +160,19 @@ const ProductFormLayer = () => {
   };
 
   const handleAddAttribute = () => {
-    setFormData(prev => ({ ...prev, attributes: [...prev.attributes, { attributeId: "", value: "", sku: "", stock: "", minOrderQty: "", maxOrderQty: "", mrp: "", price: "", images: [] }] }));
+    setFormData(prev => ({
+      ...prev,
+      attributes: [...prev.attributes, {
+        combination: [{ attributeId: "", value: "" }],
+        sku: "",
+        stock: "",
+        minOrderQty: "",
+        maxOrderQty: "",
+        mrp: "",
+        price: "",
+        images: []
+      }]
+    }));
   };
   const handleRemoveAttribute = (index) => {
     const updated = [...formData.attributes];
@@ -166,27 +184,45 @@ const ProductFormLayer = () => {
     updated[index][field] = value;
     setFormData(prev => ({ ...prev, attributes: updated }));
   };
+
+  const handleAddCombination = (index) => {
+    const updated = [...formData.attributes];
+    updated[index].combination.push({ attributeId: "", value: "" });
+    setFormData(prev => ({ ...prev, attributes: updated }));
+  };
+
+  const handleRemoveCombination = (attrIndex, combIndex) => {
+    const updated = [...formData.attributes];
+    updated[attrIndex].combination.splice(combIndex, 1);
+    setFormData(prev => ({ ...prev, attributes: updated }));
+  };
+
+  const handleCombinationChange = (attrIndex, combIndex, field, value) => {
+    const updated = [...formData.attributes];
+    updated[attrIndex].combination[combIndex][field] = value;
+    setFormData(prev => ({ ...prev, attributes: updated }));
+  };
   const handleAttributeImageUpload = async (e, index) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
       setLoading(true);
       const updated = [...formData.attributes];
       for (const file of files) {
-         const form = new FormData();
-         form.append("file", file);
-         const uploadRes = await ImageUploadApi.uploadImage({ formData: form, path: "products" });
-         if (uploadRes.status) updated[index].images.push(uploadRes.response.data || uploadRes.response);
+        const form = new FormData();
+        form.append("file", file);
+        const uploadRes = await ImageUploadApi.uploadImage({ formData: form, path: "products" });
+        if (uploadRes.status) updated[index].images.push(uploadRes.response.data || uploadRes.response);
       }
       setFormData(prev => ({ ...prev, attributes: updated }));
       setLoading(false);
     }
   };
   const handleRemoveAttributeImage = async (attrIndex, imgIndex) => {
-      const updated = [...formData.attributes];
-      const imgPath = updated[attrIndex].images[imgIndex];
-      // We could optionally call the API to delete here
-      updated[attrIndex].images.splice(imgIndex, 1);
-      setFormData(prev => ({ ...prev, attributes: updated }));
+    const updated = [...formData.attributes];
+    const imgPath = updated[attrIndex].images[imgIndex];
+    // We could optionally call the API to delete here
+    updated[attrIndex].images.splice(imgIndex, 1);
+    setFormData(prev => ({ ...prev, attributes: updated }));
   };
 
   const validateForm = () => {
@@ -205,15 +241,18 @@ const ProductFormLayer = () => {
     payload.weight = payload.weight ? parseFloat(payload.weight) : null;
     payload.lowStockAlert = payload.lowStockAlert ? parseFloat(payload.lowStockAlert) : null;
     if (payload.attributes && Array.isArray(payload.attributes)) {
-      payload.attributes = payload.attributes.map(attr => ({
-        ...attr,
-        sku: attr.sku ? parseFloat(attr.sku) : 0,
-        stock: attr.stock ? parseFloat(attr.stock) : 0,
-        minOrderQty: attr.minOrderQty ? parseFloat(attr.minOrderQty) : 0,
-        maxOrderQty: attr.maxOrderQty ? parseFloat(attr.maxOrderQty) : 0,
-        mrp: attr.mrp ? parseFloat(attr.mrp) : 0,
-        price: attr.price ? parseFloat(attr.price) : 0,
-      }));
+      payload.attributes = payload.attributes
+        .filter(attr => attr.combination && attr.combination.some(c => c.attributeId)) // Only keep variations with at least one attribute set
+        .map(attr => ({
+          ...attr,
+          combination: attr.combination.filter(c => c.attributeId), // Remove empty combination rows if any
+          sku: attr.sku ? parseFloat(attr.sku) : 0,
+          stock: attr.stock ? parseFloat(attr.stock) : 0,
+          minOrderQty: attr.minOrderQty ? parseFloat(attr.minOrderQty) : 0,
+          maxOrderQty: attr.maxOrderQty ? parseFloat(attr.maxOrderQty) : 0,
+          mrp: attr.mrp ? parseFloat(attr.mrp) : 0,
+          price: attr.price ? parseFloat(attr.price) : 0,
+        }));
     }
     payload.isActive = payload.status;
     let result;
@@ -316,61 +355,129 @@ const ProductFormLayer = () => {
           </div>
           <div className="mt-4 pt-4 border-top">
             <div className="d-flex align-items-center justify-content-between mb-3">
-              <h6 className="mb-0">Attributes</h6>
-              {!isView && <button type="button" className="btn btn-sm btn-primary-600 radius-8" onClick={handleAddAttribute}><Icon icon="ic:baseline-plus" /> Add Attribute</button>}
+              <h6 className="mb-0">Product Variations (Combinations)</h6>
+              {!isView && <button type="button" className="btn btn-sm btn-primary-600 radius-8" onClick={handleAddAttribute}><Icon icon="ic:baseline-plus" /> Add Variation</button>}
             </div>
             {formData.attributes.map((attr, index) => (
-              <div key={index} className="p-3 mb-3 border radius-8 position-relative">
-                {!isView && <button type="button" className="btn btn-icon btn-outline-danger-600 rounded-circle position-absolute end-0 top-0 m-2" onClick={() => handleRemoveAttribute(index)}><Icon icon="mingcute:delete-2-line" /></button>}
-                <div className="row gy-3 mt-1">
+              <div key={index} className="p-4 mb-4 border radius-8 position-relative bg-light-50 shadow-sm">
+                <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                  <h6 className="text-md mb-0 text-primary-600 fw-bold">Variation #{index + 1}</h6>
+                  {!isView && (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-danger radius-8 d-flex align-items-center gap-1"
+                      onClick={() => handleRemoveAttribute(index)}
+                    >
+                      <Icon icon="mingcute:delete-2-line" fontSize="16px" />
+                      <span>Remove Variation</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="row gy-3">
+                  {/* Nested Combinations section */}
+                  <div className="col-12 mb-2">
+                    <div className="d-flex align-items-center justify-content-between mb-3">
+                      <label className="form-label fw-bold mb-0 text-secondary-600">Attributes Combination (e.g. Red + M)</label>
+                      {!isView && (
+                        <button type="button" className="btn btn-sm btn-primary-600 radius-8 py-2 px-3 d-flex align-items-center gap-2" onClick={() => handleAddCombination(index)} style={{ backgroundColor: "#003366", borderColor: "#003366" }}>
+                          <Icon icon="ic:baseline-plus" width="18" />
+                          <span>Add Attribute</span>
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="ps-3 border-start border-2 border-primary-100">
+                      {attr.combination && attr.combination.map((comb, cIdx) => {
+                        const selectedAttr = attributeOptions.find(opt => opt.value === comb.attributeId);
+                        let valueOptions = [];
+
+                        if (selectedAttr?.rawValues) {
+                          if (typeof selectedAttr.rawValues === "string") {
+                            valueOptions = selectedAttr.rawValues.split(",").map(v => ({ value: v.trim(), label: v.trim() }));
+                          } else if (Array.isArray(selectedAttr.rawValues)) {
+                            valueOptions = selectedAttr.rawValues.map(v => ({ value: String(v).trim(), label: String(v).trim() }));
+                          }
+                        }
+
+                        return (
+                          <div key={cIdx} className="row gy-2 mb-3 align-items-end">
+                            <div className="col-md-5">
+                              <label className="form-label text-xs fw-semibold text-secondary-500">Attribute Name</label>
+                              <Select
+                                options={attributeOptions}
+                                value={attributeOptions.find(opt => opt.value === comb.attributeId)}
+                                onChange={(sel) => handleCombinationChange(index, cIdx, "attributeId", sel ? sel.value : "")}
+                                isDisabled={isView}
+                                styles={selectStyles()}
+                                placeholder="Select Attribute"
+                              />
+                            </div>
+                            <div className="col-md-5">
+                              <label className="form-label text-xs fw-semibold text-secondary-500">Value</label>
+                              <Select
+                                options={valueOptions}
+                                value={valueOptions.find(opt => opt.value === comb.value)}
+                                onChange={(sel) => handleCombinationChange(index, cIdx, "value", sel ? sel.value : "")}
+                                isDisabled={isView || !comb.attributeId}
+                                styles={selectStyles()}
+                                placeholder="Select Value"
+                              />
+                            </div>
+                            {!isView && attr.combination.length > 1 && (
+                              <div className="col-md-1 mb-2">
+                                <button type="button" className="btn btn-icon btn-sm btn-danger text-white rounded-circle" onClick={() => handleRemoveCombination(index, cIdx)} title="Remove Attribute">
+                                  <Icon icon="mingcute:delete-2-line" fontSize="14px" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Variation Details */}
                   <div className="col-md-3">
-                     <label className="form-label fw-semibold">Attribute Name <span className="text-danger">*</span></label>
-                     <Select options={attributeOptions} value={attributeOptions.find(opt => opt.value === attr.attributeId)} onChange={(sel) => handleAttributeChange(index, "attributeId", sel ? sel.value : "")} isDisabled={isView} placeholder="Select Attribute" />
+                    <label className="form-label fw-semibold">SKU</label>
+                    <input type="text" className="form-control radius-8" value={attr.sku} onChange={(e) => handleAttributeChange(index, "sku", e.target.value)} disabled={isView} placeholder="SKU" />
                   </div>
                   <div className="col-md-3">
-                     <label className="form-label fw-semibold">Value <span className="text-danger">*</span></label>
-                     <input type="text" className="form-control radius-8" value={attr.value} onChange={(e) => handleAttributeChange(index, "value", e.target.value)} disabled={isView} placeholder="Value" />
-                  </div>
-                  <div className="col-md-2">
-                     <label className="form-label fw-semibold">SKU</label>
-                     <input type="text" className="form-control radius-8" value={attr.sku} onChange={(e) => handleAttributeChange(index, "sku", e.target.value)} disabled={isView} placeholder="SKU" />
-                  </div>
-                  <div className="col-md-2">
-                     <label className="form-label fw-semibold">Stock Quantity</label>
-                     <input type="number" className="form-control radius-8" value={attr.stock} onChange={(e) => handleAttributeChange(index, "stock", e.target.value)} disabled={isView} placeholder="Stock" />
-                  </div>
-                  <div className="col-md-2">
-                     <label className="form-label fw-semibold">Min Order Qty</label>
-                     <input type="number" className="form-control radius-8" value={attr.minOrderQty} onChange={(e) => handleAttributeChange(index, "minOrderQty", e.target.value)} disabled={isView} placeholder="Min Qty" />
-                  </div>
-                  <div className="col-md-2">
-                     <label className="form-label fw-semibold">Max Order Qty</label>
-                     <input type="number" className="form-control radius-8" value={attr.maxOrderQty} onChange={(e) => handleAttributeChange(index, "maxOrderQty", e.target.value)} disabled={isView} placeholder="Max Qty" />
-                  </div>
-                  <div className="col-md-2">
-                     <label className="form-label fw-semibold">MRP</label>
-                     <input type="number" className="form-control radius-8" value={attr.mrp} onChange={(e) => handleAttributeChange(index, "mrp", e.target.value)} disabled={isView} placeholder="MRP" />
+                    <label className="form-label fw-semibold">Stock Quantity</label>
+                    <input type="number" className="form-control radius-8" value={attr.stock} onChange={(e) => handleAttributeChange(index, "stock", e.target.value)} disabled={isView} placeholder="Stock" />
                   </div>
                   <div className="col-md-3">
-                     <label className="form-label fw-semibold">Price <span className="text-danger">*</span></label>
-                     <input type="number" className="form-control radius-8" value={attr.price} onChange={(e) => handleAttributeChange(index, "price", e.target.value)} disabled={isView} placeholder="Price" />
+                    <label className="form-label fw-semibold">Min Order Qty</label>
+                    <input type="number" className="form-control radius-8" value={attr.minOrderQty} onChange={(e) => handleAttributeChange(index, "minOrderQty", e.target.value)} disabled={isView} placeholder="Min Qty" />
                   </div>
-                  <div className="col-md-5">
-                     <label className="form-label fw-semibold">Images (Optional)</label>
-                     {!isView && <input type="file" multiple className="form-control radius-8 mb-2" accept="image/*" onChange={(e) => handleAttributeImageUpload(e, index)} disabled={loading} />}
-                     <div className="d-flex flex-wrap gap-2">
-                         {attr.images && attr.images.map((img, i) => (
-                             <div key={i} className="position-relative w-64-px h-64-px rounded border">
-                                 <img src={`${IMAGE_BASE_URL}/${img.path || img}`} alt="" className="w-100 h-100 object-fit-cover rounded" />
-                                 {!isView && <button type="button" className="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 rounded-circle" style={{transform: "translate(30%, -30%)", padding: "2px"}} onClick={() => handleRemoveAttributeImage(index, i)}><Icon icon="mingcute:delete-2-line" fontSize="12px" /></button>}
-                             </div>
-                         ))}
-                     </div>
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">Max Order Qty</label>
+                    <input type="number" className="form-control radius-8" value={attr.maxOrderQty} onChange={(e) => handleAttributeChange(index, "maxOrderQty", e.target.value)} disabled={isView} placeholder="Max Qty" />
+                  </div>
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">MRP</label>
+                    <input type="number" className="form-control radius-8" value={attr.mrp} onChange={(e) => handleAttributeChange(index, "mrp", e.target.value)} disabled={isView} placeholder="MRP" />
+                  </div>
+                  <div className="col-md-3">
+                    <label className="form-label fw-semibold">Price <span className="text-danger">*</span></label>
+                    <input type="number" className="form-control radius-8" value={attr.price} onChange={(e) => handleAttributeChange(index, "price", e.target.value)} disabled={isView} placeholder="Price" />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">Images (Optional)</label>
+                    {!isView && <input type="file" multiple className="form-control radius-8 mb-2" accept="image/*" onChange={(e) => handleAttributeImageUpload(e, index)} disabled={loading} />}
+                    <div className="d-flex flex-wrap gap-2">
+                      {attr.images && attr.images.map((img, i) => (
+                        <div key={i} className="position-relative w-64-px h-64-px rounded border shadow-sm">
+                          <img src={`${IMAGE_BASE_URL}/${img.path || img}`} alt="" className="w-100 h-100 object-fit-cover rounded" />
+                          {!isView && <button type="button" className="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 rounded-circle" style={{ transform: "translate(30%, -30%)", padding: "2px" }} onClick={() => handleRemoveAttributeImage(index, i)}><Icon icon="mingcute:delete-2-line" fontSize="12px" /></button>}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
-            {formData.attributes.length === 0 && <div className="text-secondary-light p-3 text-center border radius-8 bg-light-600">No attributes added yet.</div>}
+            {formData.attributes.length === 0 && <div className="text-secondary-light p-3 text-center border radius-8 bg-light-600">No variations added yet. Click "Add Variation" to create product combinations.</div>}
           </div>
           <div className="mt-4 pt-4 border-top">
             <div className="d-flex align-items-center justify-content-between mb-3">
@@ -379,17 +486,17 @@ const ProductFormLayer = () => {
             </div>
             <div className="row gy-3">
               {formData.specifications.map((spec, index) => (
-                 <div key={index} className="col-12 d-flex align-items-center gap-3">
-                    <div className="flex-grow-1">
-                       <input type="text" className="form-control radius-8" value={spec.key} onChange={(e) => handleSpecificationChange(index, "key", e.target.value)} disabled={isView} placeholder="e.g. Style" />
-                    </div>
-                    <div className="flex-grow-1">
-                       <input type="text" className="form-control radius-8" value={spec.value} onChange={(e) => handleSpecificationChange(index, "value", e.target.value)} disabled={isView} placeholder="e.g. Regular Jacket" />
-                    </div>
-                    {!isView && (
-                       <button type="button" className="btn btn-icon btn-outline-danger-600 rounded-circle" onClick={() => handleRemoveSpecification(index)} disabled={formData.specifications.length === 1} title="Remove"><Icon icon="mingcute:delete-2-line" /></button>
-                    )}
-                 </div>
+                <div key={index} className="col-12 d-flex align-items-center gap-3">
+                  <div className="flex-grow-1">
+                    <input type="text" className="form-control radius-8" value={spec.key} onChange={(e) => handleSpecificationChange(index, "key", e.target.value)} disabled={isView} placeholder="e.g. Style" />
+                  </div>
+                  <div className="flex-grow-1">
+                    <input type="text" className="form-control radius-8" value={spec.value} onChange={(e) => handleSpecificationChange(index, "value", e.target.value)} disabled={isView} placeholder="e.g. Regular Jacket" />
+                  </div>
+                  {!isView && (
+                    <button type="button" className="btn btn-icon btn-outline-danger-600 rounded-circle" onClick={() => handleRemoveSpecification(index)} disabled={formData.specifications.length === 1} title="Remove"><Icon icon="mingcute:delete-2-line" /></button>
+                  )}
+                </div>
               ))}
             </div>
           </div>

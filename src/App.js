@@ -12,6 +12,16 @@ import ViewProfilePage from "./pages/ViewProfilePage";
 import MyProfilePage from "./pages/MyProfilePage";
 import RouteScrollToTop from "./helper/RouteScrollToTop";
 import PrivateRoute from "./helper/PrivateRoute";
+import CustomerOrderListPage from "./pages/CustomerOrderListPage";
+import CustomerOrderDetailsPage from "./pages/CustomerOrderDetailsPage";
+import CustomerListPage from "./pages/CustomerListPage";
+import CustomerDetailsPage from "./pages/CustomerDetailsPage";
+import CancelledOrderListPage from "./pages/CancelledOrderListPage";
+import ReturnOrderListPage from "./pages/ReturnOrderListPage";
+import ReturnOrderDetailsPage from "./pages/ReturnOrderDetailsPage";
+import OrderFeedbackListPage from "./pages/OrderFeedbackListPage";
+import PosOrderPage from "./pages/PosOrderPage";
+import PosHistoryPage from "./pages/PosHistoryPage";
 import { ToastContainer } from "react-toastify";
 import ComingSoonPage from "./pages/ComingSoonPage";
 import AccessDeniedPage from "./pages/AccessDeniedPage";
@@ -119,6 +129,7 @@ import TaxListPage from "./pages/TaxListPage";
 import TaxFormPage from "./pages/TaxFormPage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductFormPage from "./pages/ProductFormPage";
+import ShippingMethodPage from "./pages/ShippingMethodPage";
 
 function App() {
   return (
@@ -267,6 +278,7 @@ function App() {
           <Route exact path="/products/add" element={<ProductFormPage />} />
           <Route exact path="/products/edit/:id" element={<ProductFormPage />} />
           <Route exact path="/products/view/:id" element={<ProductFormPage />} />
+          <Route exact path="/shipping-methods" element={<ShippingMethodPage />} />
 
           <Route exact path="/user-roles" element={<UserRoleListPage />} />
           <Route
@@ -523,6 +535,11 @@ function App() {
           />
           {/* Orders */}
           <Route exact path="/orders" element={<OrdersPage />} />
+          <Route exact path="/customer-orders" element={<CustomerOrderListPage />} />
+          <Route exact path="/customer-orders/view/:id" element={<CustomerOrderDetailsPage />} />
+          <Route exact path="/cancelled-orders" element={<CancelledOrderListPage />} />
+          <Route exact path="/return-orders" element={<ReturnOrderListPage />} />
+          <Route exact path="/return-orders/view/:id" element={<ReturnOrderDetailsPage />} />
           {/* Log Report */}
           <Route exact path="/log-report" element={<LogReportPage />} />
           {/* Chapter Report */}
@@ -650,6 +667,11 @@ function App() {
             path="/meeting-history/:id"
             element={<MeetingHistoryPage />}
           />
+          <Route exact path="/customer-list" element={<CustomerListPage />} />
+          <Route exact path="/customer-list/view/:id" element={<CustomerDetailsPage />} />
+          <Route exact path="/orders-feedback" element={<OrderFeedbackListPage />} />
+          <Route exact path="/pos-order" element={<PosOrderPage />} />
+          <Route exact path="/pos-history" element={<PosHistoryPage />} />
           <Route exact path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
