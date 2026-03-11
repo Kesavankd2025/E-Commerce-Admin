@@ -2,10 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import PosApi from "../Api/PosApi";
 import { Modal, Button } from "react-bootstrap";
+import { IMAGE_BASE_URL } from "../Config/Index";
+
 
 const PosOrderLayer = () => {
+    // Keyboard navigation state
+    const [focusedCustomerIdx, setFocusedCustomerIdx] = useState(-1);
+    const [focusedProductIdx, setFocusedProductIdx] = useState(-1);
+
     // Custom Styles for POS Terminal
     const posStyles = `
+        .dropdown-item.active-focus {
+            background-color: #364e3d !important;
+            color: #fff !important;
+        }
         .pos-terminal-wrapper {
             background-color: #f8f9fa;
         }
@@ -56,7 +66,7 @@ const PosOrderLayer = () => {
     const [customers, setCustomers] = useState([]);
     const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [showCustomerModal, setShowCustomerModal] = useState(false);
-    const [newCustomer, setNewCustomer] = useState({ fullName: "", phoneNumber: "", email: "" });
+    const [newCustomer, setNewCustomer] = useState({ fullName: "", phoneNumber: "", address: "" });
 
     const [productSearch, setProductSearch] = useState("");
     const [products, setProducts] = useState([]);
@@ -128,6 +138,7 @@ const PosOrderLayer = () => {
 
     // Search Customers
     useEffect(() => {
+        setFocusedCustomerIdx(-1);
         if (customerSearch.length >= 1) {
             const delay = setTimeout(async () => {
                 const res = await PosApi.searchCustomers(customerSearch);
@@ -141,6 +152,7 @@ const PosOrderLayer = () => {
 
     // Search Products
     useEffect(() => {
+        setFocusedProductIdx(-1);
         if (productSearch.length >= 1) {
             const delay = setTimeout(async () => {
                 const res = await PosApi.searchProducts(productSearch);
@@ -152,12 +164,39 @@ const PosOrderLayer = () => {
         }
     }, [productSearch]);
 
+    const handleCustomerKeyDown = (e) => {
+        if (customers.length === 0) return;
+        if (e.key === "ArrowDown") {
+            setFocusedCustomerIdx(prev => (prev + 1) % customers.length);
+        } else if (e.key === "ArrowUp") {
+            setFocusedCustomerIdx(prev => (prev - 1 + customers.length) % customers.length);
+        } else if (e.key === "Enter" && focusedCustomerIdx >= 0) {
+            const c = customers[focusedCustomerIdx];
+            setSelectedCustomer(c);
+            setCustomers([]);
+            setCustomerSearch("");
+            setFocusedCustomerIdx(-1);
+        }
+    };
+
+    const handleProductKeyDown = (e) => {
+        if (products.length === 0) return;
+        if (e.key === "ArrowDown") {
+            setFocusedProductIdx(prev => (prev + 1) % products.length);
+        } else if (e.key === "ArrowUp") {
+            setFocusedProductIdx(prev => (prev - 1 + products.length) % products.length);
+        } else if (e.key === "Enter" && focusedProductIdx >= 0) {
+            handleProductSelect(products[focusedProductIdx]);
+            setFocusedProductIdx(-1);
+        }
+    };
+
     const handleAddCustomer = async () => {
         const res = await PosApi.addCustomer(newCustomer);
         if (res.status) {
             setSelectedCustomer(res.response.data);
             setShowCustomerModal(false);
-            setNewCustomer({ fullName: "", phoneNumber: "", email: "" });
+            setNewCustomer({ fullName: "", phoneNumber: "", address: "" });
             setCustomerSearch("");
         }
     };
@@ -165,6 +204,9 @@ const PosOrderLayer = () => {
     const addToCart = (product, variant = null) => {
         const productId = product.id || product._id;
         const cartId = variant ? `${productId}-${variant.sku}` : productId;
+
+        // Get image from variant if available, else from first attribute, else fallback
+        const selectedImg = variant?.images?.[0] || product.attributes?.[0]?.images?.[0] || product.productImage || product.image;
 
         const existing = cart.find(item => item.cartId === cartId);
         if (existing) {
@@ -179,7 +221,7 @@ const PosOrderLayer = () => {
                 price: variant ? (Number(variant.price) || product.price || 0) : (product.price || 0),
                 mrp: variant ? (Number(variant.mrp) || product.mrp || 0) : (product.mrp || 0),
                 qty: 1,
-                image: product.productImage || product.image
+                image: selectedImg
             }]);
         }
         setProductSearch("");
@@ -219,7 +261,7 @@ const PosOrderLayer = () => {
             products: cart,
             totalAmount: subtotal,
             taxAmount: tax,
-            grandTotal: grandTotal,
+            grandTotal: Number(grandTotal.toFixed(2)),
             payments: payments,
             overallDiscount: overallDiscount,
             address: {
@@ -288,10 +330,10 @@ const PosOrderLayer = () => {
                                                 <td className="ps-24 py-16">
                                                     <div className="d-flex align-items-center gap-3">
                                                         <div className="avatar-md flex-shrink-0 bg-neutral-100 p-1 radius-4">
-                                                            <img src={process.env.REACT_APP_IMG_URL + item.image?.path} alt="" className="w-100 h-100 object-fit-cover radius-4" />
+                                                            <img src={IMAGE_BASE_URL + "/" + item.image?.path} alt="" className="w-100 h-100 object-fit-cover radius-4" />
                                                         </div>
                                                         <div className="flex-grow-1">
-                                                            <p className="mb-0 fw-bold text-sm text-secondary-light line-height-1.2">{item.productName}</p>
+                                                            <p className="mb-0 fw-bold text-sm line-height-1.2">{item.productName}</p>
                                                             {item.combination ? (
                                                                 <div className="d-flex gap-1 mt-4">
                                                                     {item.combination.map((c, i) => (
@@ -360,7 +402,7 @@ const PosOrderLayer = () => {
                                 <div className="col-md-3">
                                     <div className="bg-primary-600 p-12 radius-8 text-center text-white border-0">
                                         <p className="mb-4 text-xxxxs opacity-75 uppercase fw-bold tracking-wider">Payable Amount</p>
-                                        <h5 className="mb-0 fw-black">₹{grandTotal.toFixed(2)}</h5>
+                                        <h5 className="mb-0 fw-black text-white" style={{ color: '#fff !important' }}>₹{grandTotal.toFixed(2)}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -386,20 +428,21 @@ const PosOrderLayer = () => {
                                             placeholder="Mobile or Name..."
                                             value={customerSearch}
                                             onChange={(e) => setCustomerSearch(e.target.value)}
+                                            onKeyDown={handleCustomerKeyDown}
                                         />
                                     </div>
 
                                     {customers.length > 0 && (
                                         <ul className="dropdown-menu show w-100 shadow-lg border-0 mt-2 radius-12 overflow-hidden z-3">
-                                            {customers.map(c => (
-                                                <li key={c._id} className="dropdown-item cursor-pointer py-12 border-bottom hover-bg-primary-50 flex-column align-items-start" onClick={() => { setSelectedCustomer(c); setCustomers([]); setCustomerSearch(""); }}>
+                                            {customers.map((c, idx) => (
+                                                <li key={c._id} className={`dropdown-item cursor-pointer py-12 border-bottom hover-bg-primary-50 flex-column align-items-start ${focusedCustomerIdx === idx ? 'active-focus' : ''}`} onClick={() => { setSelectedCustomer(c); setCustomers([]); setCustomerSearch(""); }}>
                                                     <div className="d-flex align-items-center gap-2">
                                                         <div className="avatar-sm bg-primary-100 text-primary-600 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0">
                                                             <Icon icon="solar:user-bold" />
                                                         </div>
                                                         <div className="overflow-hidden">
-                                                            <p className="mb-0 fw-bold text-sm text-secondary-light">{c.fullName}</p>
-                                                            <p className="mb-0 text-xxxxs text-secondary-light">{c.phoneNumber}</p>
+                                                            <p className="mb-0 fw-bold text-sm ">{c.fullName}</p>
+                                                            <p className="mb-0 text-xxxxs">{c.phoneNumber}</p>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -451,28 +494,34 @@ const PosOrderLayer = () => {
                                             placeholder="Name or SKU code..."
                                             value={productSearch}
                                             onChange={(e) => setProductSearch(e.target.value)}
+                                            onKeyDown={handleProductKeyDown}
                                             autoComplete="off"
                                         />
                                     </div>
 
                                     {products.length > 0 && (
                                         <ul className="dropdown-menu show w-100 shadow-lg border-0 mt-2 radius-12 overflow-hidden z-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                                            {products.map(p => (
-                                                <li key={p._id} className="dropdown-item cursor-pointer py-16 border-bottom hover-bg-primary-50" onClick={() => handleProductSelect(p)}>
-                                                    <div className="d-flex align-items-center gap-3">
-                                                        <div className="avatar-lg bg-neutral-100 p-1 radius-8 flex-shrink-0">
-                                                            <img src={process.env.REACT_APP_IMG_URL + p.productImage?.path} alt="" className="w-100 h-100 object-fit-cover radius-4" />
-                                                        </div>
-                                                        <div className="flex-grow-1 overflow-hidden">
-                                                            <p className="mb-4 fw-bold text-sm text-secondary-light line-height-1.2">{p.name}</p>
-                                                            <div className="d-flex align-items-center justify-content-between">
-                                                                <span className="badge bg-neutral-100 text-secondary-light text-xxxxs px-6 py-2">SKU: {p.sku}</span>
-                                                                <span className="text-sm fw-black text-primary-600">₹{p.price}</span>
+                                            {products.map((p, idx) => {
+                                                const dropDownImg = p.attributes?.[0]?.images?.[0] || p.productImage || p.image;
+                                                const dropDownSku = p.sku || p.attributes?.[0]?.sku || "N/A";
+                                                const dropDownPrice = p.price || p.attributes?.[0]?.price || 0;
+                                                return (
+                                                    <li key={p._id} className={`dropdown-item cursor-pointer py-16 border-bottom hover-bg-primary-50 ${focusedProductIdx === idx ? 'active-focus' : ''}`} onClick={() => handleProductSelect(p)}>
+                                                        <div className="d-flex align-items-center gap-3">
+                                                            <div className="avatar-lg bg-neutral-100 p-1 radius-8 flex-shrink-0">
+                                                                <img src={IMAGE_BASE_URL + "/" + dropDownImg?.path} alt="" className="w-100 h-100 object-fit-cover radius-4" />
+                                                            </div>
+                                                            <div className="flex-grow-1 overflow-hidden">
+                                                                <p className="mb-4 fw-bold text-sm line-height-1.2">{p.name}</p>
+                                                                <div className="d-flex align-items-center justify-content-between">
+                                                                    <span className="badge bg-neutral-100 text-secondary-light text-xxxxs px-6 py-2">SKU: {dropDownSku}</span>
+                                                                    <span className="text-sm fw-black">₹{dropDownPrice}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            ))}
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     )}
                                 </div>
@@ -523,8 +572,8 @@ const PosOrderLayer = () => {
                             <input type="text" className="form-control" value={newCustomer.phoneNumber} onChange={(e) => setNewCustomer({ ...newCustomer, phoneNumber: e.target.value })} />
                         </div>
                         <div className="col-12">
-                            <label className="form-label">Email (Optional)</label>
-                            <input type="email" className="form-control" value={newCustomer.email} onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })} />
+                            <label className="form-label">Address (Optional)</label>
+                            <textarea className="form-control" rows="2" value={newCustomer.address} onChange={(e) => setNewCustomer({ ...newCustomer, address: e.target.value })} placeholder="Enter customer address..."></textarea>
                         </div>
                     </div>
                 </Modal.Body>
@@ -669,7 +718,7 @@ const PosOrderLayer = () => {
                                             <div className="text-end">
                                                 <p className="mb-0 fw-bold text-primary-600">₹{(Number(attr.price) || selectedProductForVariant.price).toFixed(2)}</p>
                                                 {attr.mrp > attr.price && (
-                                                    <p className="mb-0 text-xxxxs text-secondary-light text-decoration-line-through">₹{attr.mrp}</p>
+                                                    <p className="mb-0 text-xxxxs text-decoration-line-through">₹{attr.mrp}</p>
                                                 )}
                                             </div>
                                         </div>

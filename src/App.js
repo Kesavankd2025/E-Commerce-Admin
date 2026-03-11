@@ -130,6 +130,12 @@ import TaxFormPage from "./pages/TaxFormPage";
 import ProductListPage from "./pages/ProductListPage";
 import ProductFormPage from "./pages/ProductFormPage";
 import ShippingMethodPage from "./pages/ShippingMethodPage";
+import VendorListPage from "./pages/VendorListPage";
+import VendorFormPage from "./pages/VendorFormPage";
+import PurchaseListPage from "./pages/PurchaseListPage";
+import AddPurchasePage from "./pages/AddPurchasePage";
+import ViewPurchasePage from "./pages/ViewPurchasePage";
+import VendorPaymentPage from "./pages/VendorPaymentPage";
 
 function App() {
   return (
@@ -142,13 +148,25 @@ function App() {
         <Route exact path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route exact path="/forgot-pin" element={<ForgotPinPage />} />
         <Route exact path="/reset-pin" element={<ResetPinPage />} />
-        <Route exact path="/coming-soon" element={<ComingSoonPage />} />
+
         <Route exact path="/access-denied" element={<AccessDeniedPage />} />
         <Route exact path="/maintenance" element={<MaintenancePage />} />
 
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
           <Route exact path="/" element={<HomePageEight />} />
+
+          {/* Vendor */}
+          <Route exact path="/vendor-list" element={<VendorListPage />} />
+          <Route exact path="/vendor/add" element={<VendorFormPage />} />
+          <Route exact path="/vendor/edit/:id" element={<VendorFormPage />} />
+          <Route exact path="/vendor/view/:id" element={<VendorFormPage />} />
+          <Route exact path="/vendor-payment" element={<VendorPaymentPage />} />
+
+          {/* Purchase Entry */}
+          <Route exact path="/purchase-entry" element={<PurchaseListPage />} />
+          <Route exact path="/purchase-entry/add" element={<AddPurchasePage />} />
+          <Route exact path="/purchase-entry/view/:id" element={<ViewPurchasePage />} />
           <Route exact path="/email" element={<EmailPage />} />
 
           <Route exact path="/view-profile" element={<ViewProfilePage />} />

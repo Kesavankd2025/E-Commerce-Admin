@@ -316,6 +316,7 @@ const MasterLayout = ({ children }) => {
                 </li>
               )}
 
+
             {/* Orders */}
             {(hasPermission("Customer Orders") ||
               hasPermission("Cancelled Orders") ||
@@ -358,6 +359,7 @@ const MasterLayout = ({ children }) => {
                   </ul>
                 </li>
               )}
+
 
             {/* Users */}
             {(hasPermission("User List") ||
@@ -429,16 +431,15 @@ const MasterLayout = ({ children }) => {
             )}
 
             {/* Vendor */}
-            {(hasPermission("Vendor List") ||
-              hasPermission("Purchase Entry") ||
-              hasPermission("Vendor Payment")) && (
+            {(hasPermission("Vendor") ||
+              hasPermission("Purchase Entry")) && (
                 <li className="dropdown">
                   <Link to="#">
                     <Icon icon="solar:shop-2-outline" className="menu-icon" />
                     <span>Vendor</span>
                   </Link>
                   <ul className="sidebar-submenu">
-                    {hasPermission("Vendor List") && (
+                    {hasPermission("Vendor") && (
                       <li>
                         <NavLink to="/vendor-list" className={(navData) => navData.isActive ? "active-page" : ""}>
                           <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Vendor List
@@ -452,7 +453,7 @@ const MasterLayout = ({ children }) => {
                         </NavLink>
                       </li>
                     )}
-                    {hasPermission("Vendor Payment") && (
+                    {hasPermission("Vendor") && (
                       <li>
                         <NavLink to="/vendor-payment" className={(navData) => navData.isActive ? "active-page" : ""}>
                           <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Payment

@@ -91,8 +91,14 @@ const PosHistoryLayer = () => {
                                             </span>
                                         </td>
                                         <td className="text-center">
-                                            <Link to={`/customer-orders/view/${order.id || order._id}`} className="btn btn-neutral p-6 text-primary-600 bg-primary-50 hover-bg-primary-100">
+                                            {/* <Link to={`/customer-orders/view/${order.id || order._id}`} className="btn btn-neutral p-6 text-primary-600 bg-primary-50 hover-bg-primary-100">
                                                 <Icon icon="solar:eye-bold" />
+                                            </Link> */}
+                                            <Link
+                                                to={`/customer-orders/view/${order.id || order._id}`}
+                                                className="bg-info-focus text-info-600 bg-hover-info-200 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle"
+                                            >
+                                                <Icon icon="majesticons:eye-line" className="menu-icon" />
                                             </Link>
                                         </td>
                                     </tr>
