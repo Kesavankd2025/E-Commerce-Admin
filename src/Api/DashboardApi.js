@@ -1,9 +1,9 @@
 import apiClient from "../Config/Index";
 
 class DashboardApi {
-  async getDashboardStats() {
+  async getStats() {
     try {
-      const response = await apiClient.get("/dashboard-apis/stats");
+      const response = await apiClient.get("/admin/dashboard/stats");
       if (response.status === 200 || response.status === 201) {
         return { status: true, response: response.data };
       }
@@ -12,9 +12,9 @@ class DashboardApi {
     }
   }
 
-  async getDashboardActivities() {
+  async getSalesOverview(filter = "Day") {
     try {
-      const response = await apiClient.get("/dashboard-apis/activities");
+      const response = await apiClient.get(`/admin/dashboard/sales-overview?filter=${filter}`);
       if (response.status === 200 || response.status === 201) {
         return { status: true, response: response.data };
       }
@@ -23,11 +23,9 @@ class DashboardApi {
     }
   }
 
-  async getOverallRevenue() {
+  async getTopSellingProducts() {
     try {
-      const response = await apiClient.get(
-        "/dashboard-apis/overall-revenue/list",
-      );
+      const response = await apiClient.get("/admin/dashboard/top-selling-products");
       if (response.status === 200 || response.status === 201) {
         return { status: true, response: response.data };
       }
@@ -36,9 +34,9 @@ class DashboardApi {
     }
   }
 
-  async getRecentlyJoinedMembers() {
+  async getTopCustomers() {
     try {
-      const response = await apiClient.get("/dashboard-apis/recently-joined");
+      const response = await apiClient.get("/admin/dashboard/top-customers");
       if (response.status === 200 || response.status === 201) {
         return { status: true, response: response.data };
       }
@@ -47,46 +45,9 @@ class DashboardApi {
     }
   }
 
-  async getTop121Members() {
+  async getTopVendors() {
     try {
-      const response = await apiClient.get("/dashboard-apis/top/1to1-members");
-      if (response.status === 200 || response.status === 201) {
-        return { status: true, response: response.data };
-      }
-    } catch (error) {
-      return { status: false, response: error?.response?.data || error };
-    }
-  }
-
-  async getTopThankYouMembers() {
-    try {
-      const response = await apiClient.get(
-        "/dashboard-apis/top/thankyou-members",
-      );
-      if (response.status === 200 || response.status === 201) {
-        return { status: true, response: response.data };
-      }
-    } catch (error) {
-      return { status: false, response: error?.response?.data || error };
-    }
-  }
-
-  async getTopReferralMembers() {
-    try {
-      const response = await apiClient.get(
-        "/dashboard-apis/top/referral-members",
-      );
-      if (response.status === 200 || response.status === 201) {
-        return { status: true, response: response.data };
-      }
-    } catch (error) {
-      return { status: false, response: error?.response?.data || error };
-    }
-  }
-
-  async getStarAchievements() {
-    try {
-      const response = await apiClient.get("/dashboard-apis/star-achievements");
+      const response = await apiClient.get("/admin/dashboard/top-vendors");
       if (response.status === 200 || response.status === 201) {
         return { status: true, response: response.data };
       }

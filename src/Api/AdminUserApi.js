@@ -2,98 +2,81 @@ import apiClient from "../Config/Index";
 import ShowNotifications from "../helper/ShowNotifications";
 
 class AdminUserApi {
-  async getAdminUser(id, currentPage, rowsPerPage, search) {
-    if (typeof id === "object" && id !== null) {
-      ({ id, currentPage, rowsPerPage, search } = id);
-    }
+  async getAdminUsers(params) {
     try {
-      const url = id
-        ? `adminUser/${id}`
-        : `adminUser?page=${currentPage || 0}&limit=${rowsPerPage || 10}&search=${search || ""}`;
-      const response = await apiClient.get(url);
-      if (response.status === 200 || response.status === 201) {
-        return { status: true, response: response.data };
-      }
+      const response = await apiClient.get(`/adminUser`, { params });
+      if (response.status === 200 || response.status === 201) return { status: true, response: response.data };
     } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to Fetch Admin User(s). Please try again.";
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to get data.";
       ShowNotifications.showAlertNotification(errorMessage, false);
-      return {
-        status: false,
-        response: error?.response?.data || error,
-      };
+      return { status: false, response: error?.response?.data || error };
+    }
+  }
+
+  async getAdminUserById(id) {
+    try {
+      const response = await apiClient.get(`/adminUser/${id}`);
+      if (response.status === 200 || response.status === 201) return { status: true, response: response.data };
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to get details.";
+      ShowNotifications.showAlertNotification(errorMessage, false);
+      return { status: false, response: error?.response?.data || error };
     }
   }
 
   async createAdminUser(data) {
     try {
-      const response = await apiClient.post("/adminUser", data);
+      const response = await apiClient.post(`/adminUser`, data);
       if (response.status === 200 || response.status === 201) {
-        ShowNotifications.showAlertNotification(
-          response.data.message || "Admin User Created Successfully!",
-          true,
-        );
+        ShowNotifications.showAlertNotification(response.data.message || "User created successfully!", true);
         return { status: true, response: response.data };
       }
     } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to Create Admin User. Please try again.";
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to create.";
       ShowNotifications.showAlertNotification(errorMessage, false);
-      return {
-        status: false,
-        response: error?.response?.data || error,
-      };
+      return { status: false, response: error?.response?.data || error };
     }
   }
 
-  async updateAdminUser(data) {
+  async updateAdminUser(id, data) {
     try {
-      const id = data instanceof FormData ? data.get("id") : data.id;
       const response = await apiClient.put(`/adminUser/${id}`, data);
       if (response.status === 200 || response.status === 201) {
-        ShowNotifications.showAlertNotification(
-          response.data.message,
-          true,
-        );
+        ShowNotifications.showAlertNotification(response.data.message || "User updated successfully!", true);
         return { status: true, response: response.data };
       }
     } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to Update Admin User. Please try again.";
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to update.";
       ShowNotifications.showAlertNotification(errorMessage, false);
-      return {
-        status: false,
-        response: error?.response?.data || error,
-      };
+      return { status: false, response: error?.response?.data || error };
     }
   }
 
   async deleteAdminUser(id) {
     try {
-      const response = await apiClient.patch(`/adminUser/${id}/toggle-active`);
+      const response = await apiClient.delete(`/adminUser/${id}`);
       if (response.status === 200 || response.status === 201) {
-        ShowNotifications.showAlertNotification(
-          response.data.message || "Admin User Deleted Successfully!",
-          true,
-        );
+        ShowNotifications.showAlertNotification(response.data.message || "User deleted successfully!", true);
         return { status: true, response: response.data };
       }
     } catch (error) {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to Delete Admin User. Please try again.";
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to delete.";
       ShowNotifications.showAlertNotification(errorMessage, false);
-      return {
-        status: false,
-        response: error?.response?.data || error,
-      };
+      return { status: false, response: error?.response?.data || error };
+    }
+  }
+
+  async toggleStatus(id) {
+    try {
+      const response = await apiClient.patch(`/adminUser/${id}/toggle-active`);
+      if (response.status === 200 || response.status === 201) {
+        ShowNotifications.showAlertNotification(response.data.message || "Status updated successfully!", true);
+        return { status: true, response: response.data };
+      }
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || error?.message || "Failed to update status.";
+      ShowNotifications.showAlertNotification(errorMessage, false);
+      return { status: false, response: error?.response?.data || error };
     }
   }
 }

@@ -137,6 +137,21 @@ import AddPurchasePage from "./pages/AddPurchasePage";
 import ViewPurchasePage from "./pages/ViewPurchasePage";
 import VendorPaymentPage from "./pages/VendorPaymentPage";
 
+import PaymentHistoryPage from "./pages/PaymentHistoryPage";
+import ManualPaymentPage from "./pages/ManualPaymentPage";
+import InventoryListPage from "./pages/InventoryListPage";
+import AddStockPage from "./pages/AddStockPage";
+
+import ProductReportsPage from "./pages/ProductReportsPage";
+import CustomerReportsPage from "./pages/CustomerReportsPage";
+import VendorReportsPage from "./pages/VendorReportsPage";
+import PaymentReportsPage from "./pages/PaymentReportsPage";
+import SalesReportsPage from "./pages/SalesReportsPage";
+
+import UserListPage from "./pages/UserListPage";
+import RolePermissionPage from "./pages/RolePermissionPage";
+import ActivityLogsPage from "./pages/ActivityLogsPage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -172,6 +187,23 @@ function App() {
           <Route exact path="/view-profile" element={<ViewProfilePage />} />
           <Route exact path="/my-profile" element={<MyProfilePage />} />
           <Route exact path="/company" element={<CompanyPage />} />
+
+          <Route exact path="/payment-history" element={<PaymentHistoryPage />} />
+          <Route exact path="/manual-payment" element={<ManualPaymentPage />} />
+          <Route exact path="/inventory-list" element={<InventoryListPage />} />
+          <Route exact path="/add-stock" element={<AddStockPage />} />
+
+          {/* Reports Routes */}
+          <Route exact path="/product-reports" element={<ProductReportsPage />} />
+          <Route exact path="/customer-reports" element={<CustomerReportsPage />} />
+          <Route exact path="/vendor-reports" element={<VendorReportsPage />} />
+          <Route exact path="/payment-reports" element={<PaymentReportsPage />} />
+          <Route exact path="/sales-reports" element={<SalesReportsPage />} />
+
+          {/* User Module Routes */}
+          <Route exact path="/user-list" element={<UserListPage />} />
+          <Route exact path="/roles-permissions" element={<RolePermissionPage />} />
+          <Route exact path="/activity-logs" element={<ActivityLogsPage />} />
           {/* Dynamic Forms using FormPage */}
           <Route
             exact
@@ -204,11 +236,6 @@ function App() {
             exact
             path="/present-update"
             element={<FormPage title="Present Update" />}
-          />
-          <Route
-            exact
-            path="/roles-permissions"
-            element={<FormPage title="Roles & Permissions" />}
           />
           <Route
             exact

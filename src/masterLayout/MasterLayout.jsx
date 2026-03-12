@@ -191,21 +191,18 @@ const MasterLayout = ({ children }) => {
         </button>
         <div>
           <Link to="/" className="sidebar-logo">
-            <img
-              src="/assets/images/logo.png"
-              alt="site logo"
-              className="light-logo"
-            />
-            <img
-              src="/assets/images/logo.png"
-              alt="site logo"
-              className="dark-logo"
-            />
-            <img
-              src="/assets/images/logo-icon.png"
-              alt="site logo"
-              className="logo-icon"
-            />
+            {sidebarActive ? (
+              <img
+                src="/assets/images/logo-icon.png"
+                alt="site logo"
+                className="logo-icon"
+                style={{ width: '40px' }}
+              />
+            ) : (
+              <span style={{ fontFamily: "'Aclonica', sans-serif", fontSize: '19px', fontWeight: '500', color: '#ffffff', letterSpacing: '0.05em', lineHeight: '1.2', whiteSpace: 'nowrap' }}>
+                <span className="logo-highlight" style={{ fontSize: '1.2em', fontWeight: '700' }}>P</span>RRAYASHA <span className="logo-highlight" style={{ fontSize: '1.2em', fontWeight: '700' }}>C</span>OLLECTIONS
+              </span>
+            )}
           </Link>
         </div>
         <div className="sidebar-menu-area" ref={sidebarRef}>
@@ -367,11 +364,21 @@ const MasterLayout = ({ children }) => {
               hasPermission("Activity Logs") ||
               hasPermission("Customer List")) && (
                 <li className="dropdown">
-                  <Link to="#">
+                  <Link to="#" className={
+                    location.pathname.startsWith("/user-list") ||
+                    location.pathname.startsWith("/roles-permissions") ||
+                    location.pathname.startsWith("/activity-logs") ||
+                    location.pathname.startsWith("/customer-list") ? "active-page" : ""
+                  }>
                     <Icon icon="solar:users-group-two-rounded-outline" className="menu-icon" />
                     <span>Users</span>
                   </Link>
-                  <ul className="sidebar-submenu">
+                  <ul className={
+                    location.pathname.startsWith("/user-list") ||
+                    location.pathname.startsWith("/roles-permissions") ||
+                    location.pathname.startsWith("/activity-logs") ||
+                    location.pathname.startsWith("/customer-list") ? "sidebar-submenu d-block" : "sidebar-submenu"
+                  }>
                     {hasPermission("User List") && (
                       <li>
                         <NavLink to="/user-list" className={(navData) => navData.isActive ? "active-page" : ""}>
