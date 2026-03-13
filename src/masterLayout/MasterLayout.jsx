@@ -225,6 +225,25 @@ const MasterLayout = ({ children }) => {
               </li>
             )}
 
+            {/* Website Management */}
+            {(hasPermission("Website") || hasPermission("Banner")) && (
+              <li className="dropdown">
+                <Link to="#" className={location.pathname.startsWith("/banner") ? "active-page" : ""}>
+                  <Icon icon="solar:global-outline" className="menu-icon" />
+                  <span>Website</span>
+                </Link>
+                <ul className="sidebar-submenu">
+                  {hasPermission("Banner") && (
+                    <li>
+                      <NavLink to="/banner" className={(navData) => navData.isActive ? "active-page" : ""}>
+                        Banner
+                      </NavLink>
+                    </li>
+                  )}
+                </ul>
+              </li>
+            )}
+
             {/* Master Creation */}
             {(hasPermission("Category") ||
               hasPermission("Sub Category") ||
@@ -256,56 +275,56 @@ const MasterLayout = ({ children }) => {
                     {hasPermission("Category") && (
                       <li>
                         <NavLink to="/category" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Category
+                          Category
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Sub Category") && (
                       <li>
                         <NavLink to="/sub-category" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Sub Category
+                          Sub Category
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Brands") && (
                       <li>
                         <NavLink to="/brands" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Brands
+                          Brands
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Attributes") && (
                       <li>
                         <NavLink to="/attributes" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Attributes
+                          Attributes
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Unit") && (
                       <li>
                         <NavLink to="/units" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Unit
+                          Unit
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Tax") && (
                       <li>
                         <NavLink to="/taxes" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Taxes
+                          Taxes
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Products") && (
                       <li>
                         <NavLink to="/products" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Products
+                          Products
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Shipping Methods") && (
                       <li>
                         <NavLink to="/shipping-methods" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Shipping Methods
+                          Shipping Methods
                         </NavLink>
                       </li>
                     )}
@@ -328,28 +347,28 @@ const MasterLayout = ({ children }) => {
                     {hasPermission("Customer Orders") && (
                       <li>
                         <NavLink to="/customer-orders" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Customer Orders
+                          Customer Orders
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Cancelled Orders") && (
                       <li>
                         <NavLink to="/cancelled-orders" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Cancelled Orders
+                          Cancelled Orders
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Return Orders") && (
                       <li>
                         <NavLink to="/return-orders" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Return Orders
+                          Return Orders
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Orders Feedback") && (
                       <li>
                         <NavLink to="/orders-feedback" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Orders Feedback
+                          Orders Feedback
                         </NavLink>
                       </li>
                     )}
@@ -382,28 +401,28 @@ const MasterLayout = ({ children }) => {
                     {hasPermission("User List") && (
                       <li>
                         <NavLink to="/user-list" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> User List
+                          User List
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Role & Permission") && (
                       <li>
                         <NavLink to="/roles-permissions" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Role & Permission
+                          Role & Permission
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Activity Logs") && (
                       <li>
                         <NavLink to="/activity-logs" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Activity Logs
+                          Activity Logs
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Customer List") && (
                       <li>
                         <NavLink to="/customer-list" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Customer List
+                          Customer List
                         </NavLink>
                       </li>
                     )}
@@ -422,14 +441,14 @@ const MasterLayout = ({ children }) => {
                   {hasPermission("POS Order") && (
                     <li>
                       <NavLink to="/pos-order" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> POS Order
+                          POS Order
                       </NavLink>
                     </li>
                   )}
                   {hasPermission("POS Order History") && (
                     <li>
                       <NavLink to="/pos-history" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> POS History
+                          POS History
                       </NavLink>
                     </li>
                   )}
@@ -449,21 +468,21 @@ const MasterLayout = ({ children }) => {
                     {hasPermission("Vendor") && (
                       <li>
                         <NavLink to="/vendor-list" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Vendor List
+                          Vendor List
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Purchase Entry") && (
                       <li>
                         <NavLink to="/purchase-entry" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Purchase Entry
+                          Purchase Entry
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Vendor") && (
                       <li>
                         <NavLink to="/vendor-payment" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Payment
+                          Payment
                         </NavLink>
                       </li>
                     )}
@@ -482,14 +501,14 @@ const MasterLayout = ({ children }) => {
                   {hasPermission("Payment History") && (
                     <li>
                       <NavLink to="/payment-history" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Payment History
+                          Payment History
                       </NavLink>
                     </li>
                   )}
                   {hasPermission("Manual Payment") && (
                     <li>
                       <NavLink to="/manual-payment" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Manual Payment
+                          Manual Payment
                       </NavLink>
                     </li>
                   )}
@@ -508,14 +527,14 @@ const MasterLayout = ({ children }) => {
                   {hasPermission("Inventory List") && (
                     <li>
                       <NavLink to="/inventory-list" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Inventory List
+                          Inventory List
                       </NavLink>
                     </li>
                   )}
                   {hasPermission("Add Stock") && (
                     <li>
                       <NavLink to="/add-stock" className={(navData) => navData.isActive ? "active-page" : ""}>
-                        <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Add Stock
+                          Add Stock
                       </NavLink>
                     </li>
                   )}
@@ -538,35 +557,35 @@ const MasterLayout = ({ children }) => {
                     {hasPermission("Product Reports") && (
                       <li>
                         <NavLink to="/product-reports" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Product reports
+                          Product reports
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Customer Reports") && (
                       <li>
                         <NavLink to="/customer-reports" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> customer reports
+                          customer reports
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Vendor Reports") && (
                       <li>
                         <NavLink to="/vendor-reports" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Vendor reports
+                          Vendor reports
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Payment Reports") && (
                       <li>
                         <NavLink to="/payment-reports" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Payment Reports
+                          Payment Reports
                         </NavLink>
                       </li>
                     )}
                     {hasPermission("Sales Reports") && (
                       <li>
                         <NavLink to="/sales-reports" className={(navData) => navData.isActive ? "active-page" : ""}>
-                          <i className="ri-circle-fill circle-icon text-primary-600 w-auto" /> Sales reports
+                          Sales reports
                         </NavLink>
                       </li>
                     )}

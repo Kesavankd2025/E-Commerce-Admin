@@ -163,7 +163,7 @@ const UserListLayer = () => {
                     <td><span className="text-md mb-0 fw-normal text-secondary-light">{item.name}</span></td>
                     <td>{item.phoneNumber}</td>
                     <td>{item.email || "-"}</td>
-                    <td><span className="badge bg-primary-focus text-primary-main px-12 py-4 radius-4">{item.roleName}</span></td>
+                    <td><span className=" bg-primary-focus text-primary-main px-12 py-4 radius-4">{item.roleName}</span></td>
                     <td>
                       <span className={`badge ${item.isActive ? "bg-success-focus text-success-600" : "bg-danger-focus text-danger-600"} px-24 py-4 radius-4 fw-medium text-sm`}>
                         {item.isActive ? "Active" : "Inactive"}
@@ -228,11 +228,11 @@ const UserListLayer = () => {
               <input type="text" className="form-control radius-8" placeholder="Enter secure PIN" value={formData.pin} onChange={(e) => setFormData({ ...formData, pin: e.target.value })} />
             </div>
             <div className="col-12">
-                <label className="form-label">Status</label>
-                <select className="form-select radius-8" value={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: Number(e.target.value) })}>
-                  <option value={1}>Active</option>
-                  <option value={0}>Inactive</option>
-                </select>
+              <label className="form-label">Status</label>
+              <select className="form-select radius-8" value={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: Number(e.target.value) })}>
+                <option value={1}>Active</option>
+                <option value={0}>Inactive</option>
+              </select>
             </div>
             <div className="col-12 text-end mt-4">
               <button type="button" className="btn btn-outline-secondary me-2 radius-8" onClick={() => setShowFormModal(false)}>Cancel</button>

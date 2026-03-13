@@ -1,156 +1,159 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import HomePageEight from "./pages/HomePageEight"; // Dashboard
-import EmailPage from "./pages/EmailPage";
-import ErrorPage from "./pages/ErrorPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ForgotPinPage from "./pages/ForgotPinPage";
-import ResetPinPage from "./pages/ResetPinPage";
-import FormPage from "./pages/FormPage";
-import SignInPage from "./pages/SignInPage";
-import SignUpPage from "./pages/SignUpPage";
-import ViewProfilePage from "./pages/ViewProfilePage";
-import MyProfilePage from "./pages/MyProfilePage";
+import HomePageEight from "./Pages/HomePageEight"; // Dashboard
+import EmailPage from "./Pages/EmailPage";
+import ErrorPage from "./Pages/ErrorPage";
+import ForgotPasswordPage from "./Pages/ForgotPasswordPage";
+import ForgotPinPage from "./Pages/ForgotPinPage";
+import ResetPinPage from "./Pages/ResetPinPage";
+import FormPage from "./Pages/FormPage";
+import SignInPage from "./Pages/SignInPage";
+import SignUpPage from "./Pages/SignUpPage";
+import ViewProfilePage from "./Pages/ViewProfilePage";
+import MyProfilePage from "./Pages/MyProfilePage";
 import RouteScrollToTop from "./helper/RouteScrollToTop";
 import PrivateRoute from "./helper/PrivateRoute";
-import CustomerOrderListPage from "./pages/CustomerOrderListPage";
-import CustomerOrderDetailsPage from "./pages/CustomerOrderDetailsPage";
-import CustomerListPage from "./pages/CustomerListPage";
-import CustomerDetailsPage from "./pages/CustomerDetailsPage";
-import CancelledOrderListPage from "./pages/CancelledOrderListPage";
-import ReturnOrderListPage from "./pages/ReturnOrderListPage";
-import ReturnOrderDetailsPage from "./pages/ReturnOrderDetailsPage";
-import OrderFeedbackListPage from "./pages/OrderFeedbackListPage";
-import PosOrderPage from "./pages/PosOrderPage";
-import PosHistoryPage from "./pages/PosHistoryPage";
+import CustomerOrderListPage from "./Pages/CustomerOrderListPage";
+import CustomerOrderDetailsPage from "./Pages/CustomerOrderDetailsPage";
+import CustomerListPage from "./Pages/CustomerListPage";
+import CustomerDetailsPage from "./Pages/CustomerDetailsPage";
+import CancelledOrderListPage from "./Pages/CancelledOrderListPage";
+import ReturnOrderListPage from "./Pages/ReturnOrderListPage";
+import ReturnOrderDetailsPage from "./Pages/ReturnOrderDetailsPage";
+import OrderFeedbackListPage from "./Pages/OrderFeedbackListPage";
+import PosOrderPage from "./Pages/PosOrderPage";
+import PosHistoryPage from "./Pages/PosHistoryPage";
 import { ToastContainer } from "react-toastify";
-import ComingSoonPage from "./pages/ComingSoonPage";
-import AccessDeniedPage from "./pages/AccessDeniedPage";
-import MaintenancePage from "./pages/MaintenancePage";
+import ComingSoonPage from "./Pages/ComingSoonPage";
+import AccessDeniedPage from "./Pages/AccessDeniedPage";
+import MaintenancePage from "./Pages/MaintenancePage";
 
-import AdminRegistrationListPage from "./pages/AdminRegistrationListPage";
-import AdminRegistrationFormPage from "./pages/AdminRegistrationFormPage";
-import AdminRegistrationViewPage from "./pages/AdminRegistrationViewPage";
-import AdminRegistrationEditPage from "./pages/AdminRegistrationEditPage";
-import RegionListPage from "./pages/RegionListPage";
-import RegionFormPage from "./pages/RegionFormPage";
-import BadgeCreationPage from "./pages/BadgeCreationPage";
-import BadgeCreateFormPage from "./pages/BadgeCreateFormPage";
-import BadgeAssignFormPage from "./pages/BadgeAssignFormPage";
-import BadgeAssignCreatePage from "./pages/BadgeAssignCreatePage";
+import AdminRegistrationListPage from "./Pages/AdminRegistrationListPage";
+import AdminRegistrationFormPage from "./Pages/AdminRegistrationFormPage";
+import AdminRegistrationViewPage from "./Pages/AdminRegistrationViewPage";
+import AdminRegistrationEditPage from "./Pages/AdminRegistrationEditPage";
+import RegionListPage from "./Pages/RegionListPage";
+import RegionFormPage from "./Pages/RegionFormPage";
+import BadgeCreationPage from "./Pages/BadgeCreationPage";
+import BadgeCreateFormPage from "./Pages/BadgeCreateFormPage";
+import BadgeAssignFormPage from "./Pages/BadgeAssignFormPage";
+import BadgeAssignCreatePage from "./Pages/BadgeAssignCreatePage";
 
-import MemberListPage from "./pages/MemberListPage";
-import MemberFormPage from "./pages/MemberFormPage";
-import AttendanceListPage from "./pages/AttendanceListPage";
+import MemberListPage from "./Pages/MemberListPage";
+import MemberFormPage from "./Pages/MemberFormPage";
+import AttendanceListPage from "./Pages/AttendanceListPage";
 
-import ChapterListPage from "./pages/ChapterListPage";
-import ChapterFormPage from "./pages/ChapterFormPage";
-import ChapterViewPage from "./pages/ChapterViewPage";
-import ChapterRoleAssignPage from "./pages/ChapterRoleAssignPage";
-import ChapterRoleHistoryPage from "./pages/ChapterRoleHistoryPage";
+import ChapterListPage from "./Pages/ChapterListPage";
+import ChapterFormPage from "./Pages/ChapterFormPage";
+import ChapterViewPage from "./Pages/ChapterViewPage";
+import ChapterRoleAssignPage from "./Pages/ChapterRoleAssignPage";
+import ChapterRoleHistoryPage from "./Pages/ChapterRoleHistoryPage";
 
-import MeetingListPage from "./pages/MeetingListPage";
-import MeetingFormPage from "./pages/MeetingFormPage";
-import MeetingAttendancePage from "./pages/MeetingAttendancePage";
-import MemberHistoryPage from "./pages/MemberHistoryPage";
+import MeetingListPage from "./Pages/MeetingListPage";
+import MeetingFormPage from "./Pages/MeetingFormPage";
+import MeetingAttendancePage from "./Pages/MeetingAttendancePage";
+import MemberHistoryPage from "./Pages/MemberHistoryPage";
 
-import CommunityUpdatePage from "./pages/CommunityUpdatePage";
-import CommunityUpdateFormPage from "./pages/CommunityUpdateFormPage";
-import StarUpdatePage from "./pages/StarUpdatePage";
-import StarUpdateFormPage from "./pages/StarUpdateFormPage";
-import GalleryPage from "./pages/MobileAdPage";
+import CommunityUpdatePage from "./Pages/CommunityUpdatePage";
+import CommunityUpdateFormPage from "./Pages/CommunityUpdateFormPage";
+import StarUpdatePage from "./Pages/StarUpdatePage";
+import StarUpdateFormPage from "./Pages/StarUpdateFormPage";
+import GalleryPage from "./Pages/MobileAdPage";
 
-import GeneralUpdatePage from "./pages/GeneralUpdatePage";
-import ChapterReportPage from "./pages/ChapterReportPage";
-import Note121Page from "./pages/Note121Page";
-import ReferralNotePage from "./pages/ReferralNotePage";
-import ThankYouSlipPage from "./pages/ThankYouSlipPage";
-import PowerMeetReportPage from "./pages/PowerDateReportPage";
-import TestimonialsPage from "./pages/TestimonialsPage";
-import VisitorsReportPage from "./pages/VisitorsReportPage";
-import VisitorsFormPage from "./pages/VisitorsFormPage";
-import TrainingsReportPage from "./pages/TrainingsReportPage";
-import AbsentProxyReportPage from "./pages/AbsentProxyReportPage";
-import PerformanceReportPage from "./pages/PerformanceReportPage";
-import InterestedMembersPage from "./pages/InterestedMembersPage";
-import ChapterMemberListPage from "./pages/ChapterMemberListPage";
-import ThankYouSlipReportDetailedPage from "./pages/ThankYouSlipReportDetailedPage";
-import TestimonialsReportDetailedPage from "./pages/TestimonialsReportDetailedPage";
-import LogReportPage from "./pages/LogReportPage";
-import ShopListPage from "./pages/ShopListPage";
-import ShopCreatePage from "./pages/ShopCreatePage";
-import ShopFormPage from "./pages/ShopFormPage";
-import ShopCategoryListPage from "./pages/ShopCategoryListPage";
-import ShopCategoryFormPage from "./pages/ShopCategoryFormPage";
-import OrdersPage from "./pages/OrdersPage";
-import TrainingListPage from "./pages/TrainingListPage";
-import TrainingFormPage from "./pages/TrainingFormPage";
-import UserRoleListPage from "./pages/UserRoleListPage";
-import UserRoleFormPage from "./pages/UserRoleFormPage";
-import ChiefGuestListPage from "./pages/ChiefGuestListPage";
-import ChiefGuestReportPage from "./pages/ChiefGuestReportPage";
-import ChiefGuestFormPage from "./pages/ChiefGuestFormPage";
-import ChiefGuestHistoryPage from "./pages/ChiefGuestHistoryPage";
-import GeneralUpdateListPage from "./pages/GeneralUpdateListPage";
-import PointsPage from "./pages/PointsPage";
-import ChapterReportListPage from "./pages/ChapterReportListPage";
-import AwardListPage from "./pages/AwardListPage";
-import AwardFormPage from "./pages/AwardFormPage";
-import BusinessCategoryListPage from "./pages/BusinessCategoryListPage";
-import BusinessCategoryFormPage from "./pages/BusinessCategoryFormPage";
-import CompanyPage from "./pages/CompanyPage";
-import ZoneFormPage from "./pages/ZoneFormPage";
-import RenewalReportPage from "./pages/RenewalReportPage";
-import LocationListPage from "./pages/LocationListPage";
-import MemberPointsReportPage from "./pages/MemberPointsReportPage";
-import MemberSuggestionPage from "./pages/MemberSuggestionPage";
-import TrainingParticipantPage from "./pages/TrainingParticipantPage";
-import MeetingHistoryPage from "./pages/MeetingHistoryPage";
-import StarUpdateResponsePage from "./pages/StarUpdateResponsePage";
-import CommunityUpdateResponsePage from "./pages/CommunityUpdateResponsePage";
-import VerticalDirectorAssignPage from "./pages/VerticalDirectorAssignPage";
-import VerticalDirectorHistoryPage from "./pages/VerticalDirectorHistoryPage";
+import GeneralUpdatePage from "./Pages/GeneralUpdatePage";
+import ChapterReportPage from "./Pages/ChapterReportPage";
+import Note121Page from "./Pages/Note121Page";
+import ReferralNotePage from "./Pages/ReferralNotePage";
+import ThankYouSlipPage from "./Pages/ThankYouSlipPage";
+import PowerMeetReportPage from "./Pages/PowerDateReportPage";
+import TestimonialsPage from "./Pages/TestimonialsPage";
+import VisitorsReportPage from "./Pages/VisitorsReportPage";
+import VisitorsFormPage from "./Pages/VisitorsFormPage";
+import TrainingsReportPage from "./Pages/TrainingsReportPage";
+import AbsentProxyReportPage from "./Pages/AbsentProxyReportPage";
+import PerformanceReportPage from "./Pages/PerformanceReportPage";
+import InterestedMembersPage from "./Pages/InterestedMembersPage";
+import ChapterMemberListPage from "./Pages/ChapterMemberListPage";
+import ThankYouSlipReportDetailedPage from "./Pages/ThankYouSlipReportDetailedPage";
+import TestimonialsReportDetailedPage from "./Pages/TestimonialsReportDetailedPage";
+import LogReportPage from "./Pages/LogReportPage";
+import ShopListPage from "./Pages/ShopListPage";
+import ShopCreatePage from "./Pages/ShopCreatePage";
+import ShopFormPage from "./Pages/ShopFormPage";
+import ShopCategoryListPage from "./Pages/ShopCategoryListPage";
+import ShopCategoryFormPage from "./Pages/ShopCategoryFormPage";
+import OrdersPage from "./Pages/OrdersPage";
+import TrainingListPage from "./Pages/TrainingListPage";
+import TrainingFormPage from "./Pages/TrainingFormPage";
+import UserRoleListPage from "./Pages/UserRoleListPage";
+import UserRoleFormPage from "./Pages/UserRoleFormPage";
+import ChiefGuestListPage from "./Pages/ChiefGuestListPage";
+import ChiefGuestReportPage from "./Pages/ChiefGuestReportPage";
+import ChiefGuestFormPage from "./Pages/ChiefGuestFormPage";
+import ChiefGuestHistoryPage from "./Pages/ChiefGuestHistoryPage";
+import GeneralUpdateListPage from "./Pages/GeneralUpdateListPage";
+import PointsPage from "./Pages/PointsPage";
+import ChapterReportListPage from "./Pages/ChapterReportListPage";
+import AwardListPage from "./Pages/AwardListPage";
+import AwardFormPage from "./Pages/AwardFormPage";
+import BusinessCategoryListPage from "./Pages/BusinessCategoryListPage";
+import BusinessCategoryFormPage from "./Pages/BusinessCategoryFormPage";
+import CompanyPage from "./Pages/CompanyPage";
+import ZoneFormPage from "./Pages/ZoneFormPage";
+import RenewalReportPage from "./Pages/RenewalReportPage";
+import LocationListPage from "./Pages/LocationListPage";
+import MemberPointsReportPage from "./Pages/MemberPointsReportPage";
+import MemberSuggestionPage from "./Pages/MemberSuggestionPage";
+import TrainingParticipantPage from "./Pages/TrainingParticipantPage";
+import MeetingHistoryPage from "./Pages/MeetingHistoryPage";
+import StarUpdateResponsePage from "./Pages/StarUpdateResponsePage";
+import CommunityUpdateResponsePage from "./Pages/CommunityUpdateResponsePage";
+import VerticalDirectorAssignPage from "./Pages/VerticalDirectorAssignPage";
+import VerticalDirectorHistoryPage from "./Pages/VerticalDirectorHistoryPage";
 
-import WebsiteEventListPage from "./pages/WebsiteEventListPage";
-import WebsiteEventFormPage from "./pages/WebsiteEventFormPage";
-import WebsiteEventViewPage from "./pages/WebsiteEventViewPage";
-import WebsiteMemberListPage from "./pages/WebsiteMemberListPage";
+import WebsiteEventListPage from "./Pages/WebsiteEventListPage";
+import WebsiteEventFormPage from "./Pages/WebsiteEventFormPage";
+import WebsiteEventViewPage from "./Pages/WebsiteEventViewPage";
+import WebsiteMemberListPage from "./Pages/WebsiteMemberListPage";
 
-import CategoryListPage from "./pages/CategoryListPage";
-import CategoryFormPage from "./pages/CategoryFormPage";
-import SubCategoryListPage from "./pages/SubCategoryListPage";
-import SubCategoryFormPage from "./pages/SubCategoryFormPage";
-import BrandListPage from "./pages/BrandListPage";
-import BrandFormPage from "./pages/BrandFormPage";
-import AttributeListPage from "./pages/AttributeListPage";
-import AttributeFormPage from "./pages/AttributeFormPage";
-import UnitListPage from "./pages/UnitListPage";
-import UnitFormPage from "./pages/UnitFormPage";
-import TaxListPage from "./pages/TaxListPage";
-import TaxFormPage from "./pages/TaxFormPage";
-import ProductListPage from "./pages/ProductListPage";
-import ProductFormPage from "./pages/ProductFormPage";
-import ShippingMethodPage from "./pages/ShippingMethodPage";
-import VendorListPage from "./pages/VendorListPage";
-import VendorFormPage from "./pages/VendorFormPage";
-import PurchaseListPage from "./pages/PurchaseListPage";
-import AddPurchasePage from "./pages/AddPurchasePage";
-import ViewPurchasePage from "./pages/ViewPurchasePage";
-import VendorPaymentPage from "./pages/VendorPaymentPage";
+import CategoryListPage from "./Pages/CategoryListPage";
+import CategoryFormPage from "./Pages/CategoryFormPage";
+import SubCategoryListPage from "./Pages/SubCategoryListPage";
+import SubCategoryFormPage from "./Pages/SubCategoryFormPage";
+import BrandListPage from "./Pages/BrandListPage";
+import BrandFormPage from "./Pages/BrandFormPage";
+import AttributeListPage from "./Pages/AttributeListPage";
+import AttributeFormPage from "./Pages/AttributeFormPage";
+import UnitListPage from "./Pages/UnitListPage";
+import UnitFormPage from "./Pages/UnitFormPage";
+import TaxListPage from "./Pages/TaxListPage";
+import TaxFormPage from "./Pages/TaxFormPage";
+import ProductListPage from "./Pages/ProductListPage";
+import ProductFormPage from "./Pages/ProductFormPage";
+import ShippingMethodPage from "./Pages/ShippingMethodPage";
+import VendorListPage from "./Pages/VendorListPage";
+import VendorFormPage from "./Pages/VendorFormPage";
+import PurchaseListPage from "./Pages/PurchaseListPage";
+import AddPurchasePage from "./Pages/AddPurchasePage";
+import ViewPurchasePage from "./Pages/ViewPurchasePage";
+import VendorPaymentPage from "./Pages/VendorPaymentPage";
 
-import PaymentHistoryPage from "./pages/PaymentHistoryPage";
-import ManualPaymentPage from "./pages/ManualPaymentPage";
-import InventoryListPage from "./pages/InventoryListPage";
-import AddStockPage from "./pages/AddStockPage";
+import PaymentHistoryPage from "./Pages/PaymentHistoryPage";
+import ManualPaymentPage from "./Pages/ManualPaymentPage";
+import InventoryListPage from "./Pages/InventoryListPage";
+import AddStockPage from "./Pages/AddStockPage";
 
-import ProductReportsPage from "./pages/ProductReportsPage";
-import CustomerReportsPage from "./pages/CustomerReportsPage";
-import VendorReportsPage from "./pages/VendorReportsPage";
-import PaymentReportsPage from "./pages/PaymentReportsPage";
-import SalesReportsPage from "./pages/SalesReportsPage";
+import ProductReportsPage from "./Pages/ProductReportsPage";
+import CustomerReportsPage from "./Pages/CustomerReportsPage";
+import VendorReportsPage from "./Pages/VendorReportsPage";
+import PaymentReportsPage from "./Pages/PaymentReportsPage";
+import SalesReportsPage from "./Pages/SalesReportsPage";
 
-import UserListPage from "./pages/UserListPage";
-import RolePermissionPage from "./pages/RolePermissionPage";
-import ActivityLogsPage from "./pages/ActivityLogsPage";
+import UserListPage from "./Pages/UserListPage";
+import RolePermissionPage from "./Pages/RolePermissionPage";
+import ActivityLogsPage from "./Pages/ActivityLogsPage";
+
+import BannerListPage from "./Pages/BannerListPage";
+import BannerAddPage from "./Pages/BannerAddPage";
 
 function App() {
   return (
@@ -170,6 +173,12 @@ function App() {
         {/* Protected Routes */}
         <Route element={<PrivateRoute />}>
           <Route exact path="/" element={<HomePageEight />} />
+
+          {/* Website Management */}
+          <Route exact path="/banner" element={<BannerListPage />} />
+          <Route exact path="/banner/add" element={<BannerAddPage />} />
+          <Route exact path="/banner/edit/:id" element={<BannerAddPage />} />
+          <Route exact path="/banner/view/:id" element={<BannerAddPage />} />
 
           {/* Vendor */}
           <Route exact path="/vendor-list" element={<VendorListPage />} />

@@ -42,20 +42,19 @@
 
 /* Main menu hover */
 .dropdown>a:hover span {
-  color: #EF5920 !important;
-  /* header color */
+  color: #D4AF37 !important;
+  /* Premium Gold highlight */
 }
 
 /* Submenu hover */
 .sidebar-submenu li a:hover {
-  color: #EF5920 !important;
-  /* header color */
+  color: #D4AF37 !important;
 }
 
 /* Optional: icon color change on hover */
 .dropdown>a:hover i,
 .sidebar-submenu li a:hover i {
-  color: #EF5920 !important;
+  color: #D4AF37 !important;
 }
 
 
@@ -193,26 +192,46 @@ table.dataTable td.dt-type-date {
   margin-right: 10px !important;
 }
 
+/* Submenu Hover & Active State Improvements */
 .sidebar-menu .sidebar-submenu li a {
-  gap: 12px;
+  padding-left: 15px !important;
+  position: relative;
+  transition: all 0.3s ease;
+  margin: 2px 12px !important; /* Spacing from sidebar edges */
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
-/* Active Page State */
-.sidebar-menu .sidebar-submenu li>.active-page {
-  background-color: #edf1ee !important;
-  /* CNI Orange-Red */
-  color: #000 !important;
+.sidebar-menu .sidebar-submenu li a:hover {
+  background-color: rgba(212, 175, 55, 0.1) !important; /* Subtle gold tint on hover */
+  color: #D4AF37 !important;
+  padding-left: 20px !important;
 }
 
-/* Active Page Hover (Blue) */
-.sidebar-menu .sidebar-submenu li>a.active-page:hover {
-  background-color: #edf1ee !important;
-  color: #000 !important;
+/* Active Submodule State - Premium Floating Look */
+.sidebar-menu .sidebar-submenu li a.active-page {
+  background-color: #ffffff !important; 
+  color: #364E3D !important; 
+  font-weight: 700 !important;
+  padding-left: 30px !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+  transform: translateX(5px); /* Slight pop out */
 }
 
-.sidebar-menu li>a.active-page:hover {
-  background-color: #edf1ee !important;
-  color: #000 !important;
+/* Vertical indicator for active submodule */
+.sidebar-menu .sidebar-submenu li a.active-page::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background-color: #D4AF37;
+  border-radius: 2px;
 }
 
 .me-8 {
@@ -262,7 +281,7 @@ table.dataTable td.dt-type-date {
 
 .custom-tabs .nav-link:hover,
 .custom-tabs .nav-link.active {
-  color: #EF5920 !important;
+  color: #D4AF37 !important;
 }
 
 .custom-tabs .nav-link.active::after {
@@ -291,8 +310,8 @@ table.dataTable td.dt-type-date {
   --bs-btn-hover-border-color: #edf1ee !important;
   --bs-btn-focus-shadow-rgb: 0, 51, 102;
   --bs-btn-active-color: #fff !important;
-  --bs-btn-active-bg: #CC4015 !important;
-  --bs-btn-active-border-color: #CC4015 !important;
+  --bs-btn-active-bg: #364E3D !important;
+  --bs-btn-active-border-color: #364E3D !important;
   --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
   --bs-btn-disabled-color: #fff !important;
   --bs-btn-disabled-bg: #003366 !important;
