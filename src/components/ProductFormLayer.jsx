@@ -353,19 +353,34 @@ const ProductFormLayer = () => {
               <textarea className="form-control radius-8" name="metaDescription" value={formData.metaDescription} onChange={handleChange} placeholder="Enter Meta Description" disabled={isView} rows="3" />
             </div>
           </div>
-          <div className="mt-4 pt-4 border-top">
-            <div className="d-flex align-items-center justify-content-between mb-3">
-              <h6 className="mb-0">Product Variations (Combinations)</h6>
-              {!isView && <button type="button" className="btn btn-sm btn-primary-600 radius-8" onClick={handleAddAttribute}><Icon icon="ic:baseline-plus" /> Add Variation</button>}
+          {/* Product Variations Section */}
+          <div className="mt-5 pt-4 border-top">
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <h6 className="mb-0 fw-bold text-lg">Product Variations (Combinations)</h6>
+              {!isView && (
+                <button
+                  type="button"
+                  className="btn btn-primary-600 radius-8 px-20 py-10 d-flex align-items-center gap-2"
+                  onClick={handleAddAttribute}
+                  style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+                >
+                  <Icon icon="ic:baseline-plus" fontSize="20px" />
+                  <span>Add Variation</span>
+                </button>
+              )}
             </div>
+            
             {formData.attributes.map((attr, index) => (
-              <div key={index} className="p-4 mb-4 border radius-8 position-relative bg-light-50 shadow-sm">
-                <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-                  <h6 className="text-md mb-0 text-primary-600 fw-bold">Variation #{index + 1}</h6>
+              <div key={index} className="p-24 mb-32 border radius-12 position-relative bg-light-50 shadow-sm">
+                <div className="d-flex justify-content-between align-items-center mb-20 border-bottom pb-16">
+                  <h6 className="text-md mb-0 text-primary-600 fw-bold">
+                    <Icon icon="ph:package-duotone" className="me-2" />
+                    Variation #{index + 1}
+                  </h6>
                   {!isView && (
                     <button
                       type="button"
-                      className="btn btn-sm btn-outline-danger radius-8 d-flex align-items-center gap-1"
+                      className="btn btn-sm btn-danger radius-8 px-12 py-6 d-flex align-items-center gap-1"
                       onClick={() => handleRemoveAttribute(index)}
                     >
                       <Icon icon="mingcute:delete-2-line" fontSize="16px" />
@@ -374,20 +389,27 @@ const ProductFormLayer = () => {
                   )}
                 </div>
 
-                <div className="row gy-3">
+                <div className="row gy-4">
                   {/* Nested Combinations section */}
-                  <div className="col-12 mb-2">
-                    <div className="d-flex align-items-center justify-content-between mb-3">
-                      <label className="form-label fw-bold mb-0 text-secondary-600">Attributes Combination (e.g. Red + M)</label>
+                  <div className="col-12 mb-3">
+                    <div className="d-flex align-items-center justify-content-between mb-16 bg-white p-12 radius-8 border">
+                      <label className="form-label fw-bold mb-0 text-secondary-700">
+                        <Icon icon="material-symbols:settings-input-component-outline" className="me-2" />
+                        Attributes Combination (e.g. Red + M)
+                      </label>
                       {!isView && (
-                        <button type="button" className="btn btn-sm btn-primary-600 radius-8 py-2 px-3 d-flex align-items-center gap-2" onClick={() => handleAddCombination(index)} style={{ backgroundColor: "#003366", borderColor: "#003366" }}>
+                        <button 
+                          type="button" 
+                          className="btn btn-dark radius-8 px-16 py-8 d-flex align-items-center gap-2" 
+                          onClick={() => handleAddCombination(index)}
+                        >
                           <Icon icon="ic:baseline-plus" width="18" />
-                          <span>Add Attribute</span>
+                          <span className="text-sm">Add Attribute</span>
                         </button>
                       )}
                     </div>
 
-                    <div className="ps-3 border-start border-2 border-primary-100">
+                    <div className="ps-4 border-start border-3 border-primary-50">
                       {attr.combination && attr.combination.map((comb, cIdx) => {
                         const selectedAttr = attributeOptions.find(opt => opt.value === comb.attributeId);
                         let valueOptions = [];
@@ -401,9 +423,9 @@ const ProductFormLayer = () => {
                         }
 
                         return (
-                          <div key={cIdx} className="row gy-2 mb-3 align-items-end">
+                          <div key={cIdx} className="row gy-3 mb-16 align-items-end justify-content-start">
                             <div className="col-md-5">
-                              <label className="form-label text-xs fw-semibold text-secondary-500">Attribute Name</label>
+                              <label className="form-label text-xs fw-bold text-secondary-600 mb-8">Attribute Name</label>
                               <Select
                                 options={attributeOptions}
                                 value={attributeOptions.find(opt => opt.value === comb.attributeId)}
@@ -414,7 +436,7 @@ const ProductFormLayer = () => {
                               />
                             </div>
                             <div className="col-md-5">
-                              <label className="form-label text-xs fw-semibold text-secondary-500">Value</label>
+                              <label className="form-label text-xs fw-bold text-secondary-600 mb-8">Value</label>
                               <Select
                                 options={valueOptions}
                                 value={valueOptions.find(opt => opt.value === comb.value)}
@@ -425,9 +447,15 @@ const ProductFormLayer = () => {
                               />
                             </div>
                             {!isView && attr.combination.length > 1 && (
-                              <div className="col-md-1 mb-2">
-                                <button type="button" className="btn btn-icon btn-sm btn-danger text-white rounded-circle" onClick={() => handleRemoveCombination(index, cIdx)} title="Remove Attribute">
-                                  <Icon icon="mingcute:delete-2-line" fontSize="14px" />
+                              <div className="col-md-1 d-flex align-items-center mb-1">
+                                <button 
+                                  type="button" 
+                                  className="btn btn-danger radius-8 p-10 d-flex align-items-center justify-content-center" 
+                                  onClick={() => handleRemoveCombination(index, cIdx)} 
+                                  title="Remove Attribute"
+                                  style={{ minWidth: "38px", height: "38px" }}
+                                >
+                                  <Icon icon="mingcute:delete-2-line" fontSize="18px" />
                                 </button>
                               </div>
                             )}
@@ -439,37 +467,37 @@ const ProductFormLayer = () => {
 
                   {/* Variation Details */}
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">SKU</label>
-                    <input type="text" className="form-control radius-8" value={attr.sku} onChange={(e) => handleAttributeChange(index, "sku", e.target.value)} disabled={isView} placeholder="SKU" />
+                    <label className="form-label fw-semibold mb-8">SKU</label>
+                    <input type="text" className="form-control radius-8 py-10" value={attr.sku} onChange={(e) => handleAttributeChange(index, "sku", e.target.value)} disabled={isView} placeholder="Enter SKU" />
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Stock Quantity</label>
-                    <input type="number" className="form-control radius-8" value={attr.stock} onChange={(e) => handleAttributeChange(index, "stock", e.target.value)} disabled={isView} placeholder="Stock" />
+                    <label className="form-label fw-semibold mb-8">Stock Quantity</label>
+                    <input type="number" className="form-control radius-8 py-10" value={attr.stock} onChange={(e) => handleAttributeChange(index, "stock", e.target.value)} disabled={isView} placeholder="Stock" />
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Min Order Qty</label>
-                    <input type="number" className="form-control radius-8" value={attr.minOrderQty} onChange={(e) => handleAttributeChange(index, "minOrderQty", e.target.value)} disabled={isView} placeholder="Min Qty" />
+                    <label className="form-label fw-semibold mb-8">Min Order Qty</label>
+                    <input type="number" className="form-control radius-8 py-10" value={attr.minOrderQty} onChange={(e) => handleAttributeChange(index, "minOrderQty", e.target.value)} disabled={isView} placeholder="Min Qty" />
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Max Order Qty</label>
-                    <input type="number" className="form-control radius-8" value={attr.maxOrderQty} onChange={(e) => handleAttributeChange(index, "maxOrderQty", e.target.value)} disabled={isView} placeholder="Max Qty" />
+                    <label className="form-label fw-semibold mb-8">Max Order Qty</label>
+                    <input type="number" className="form-control radius-8 py-10" value={attr.maxOrderQty} onChange={(e) => handleAttributeChange(index, "maxOrderQty", e.target.value)} disabled={isView} placeholder="Max Qty" />
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">MRP</label>
-                    <input type="number" className="form-control radius-8" value={attr.mrp} onChange={(e) => handleAttributeChange(index, "mrp", e.target.value)} disabled={isView} placeholder="MRP" />
+                    <label className="form-label fw-semibold mb-8">MRP</label>
+                    <input type="number" className="form-control radius-8 py-10" value={attr.mrp} onChange={(e) => handleAttributeChange(index, "mrp", e.target.value)} disabled={isView} placeholder="MRP" />
                   </div>
                   <div className="col-md-3">
-                    <label className="form-label fw-semibold">Price <span className="text-danger">*</span></label>
-                    <input type="number" className="form-control radius-8" value={attr.price} onChange={(e) => handleAttributeChange(index, "price", e.target.value)} disabled={isView} placeholder="Price" />
+                    <label className="form-label fw-semibold mb-8">Price <span className="text-danger">*</span></label>
+                    <input type="number" className="form-control radius-8 py-10" value={attr.price} onChange={(e) => handleAttributeChange(index, "price", e.target.value)} disabled={isView} placeholder="Price" />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">Images (Optional)</label>
-                    {!isView && <input type="file" multiple className="form-control radius-8 mb-2" accept="image/*" onChange={(e) => handleAttributeImageUpload(e, index)} disabled={loading} />}
-                    <div className="d-flex flex-wrap gap-2">
+                    <label className="form-label fw-semibold mb-8">Images (Optional)</label>
+                    {!isView && <input type="file" multiple className="form-control radius-8 mb-12" accept="image/*" onChange={(e) => handleAttributeImageUpload(e, index)} disabled={loading} />}
+                    <div className="d-flex flex-wrap gap-12">
                       {attr.images && attr.images.map((img, i) => (
-                        <div key={i} className="position-relative w-64-px h-64-px rounded border shadow-sm">
+                        <div key={i} className="position-relative w-80-px h-80-px rounded border shadow-sm bg-white p-4">
                           <img src={`${IMAGE_BASE_URL}/${img.path || img}`} alt="" className="w-100 h-100 object-fit-cover rounded" />
-                          {!isView && <button type="button" className="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 rounded-circle" style={{ transform: "translate(30%, -30%)", padding: "2px" }} onClick={() => handleRemoveAttributeImage(index, i)}><Icon icon="mingcute:delete-2-line" fontSize="12px" /></button>}
+                          {!isView && <button type="button" className="btn btn-sm btn-icon btn-danger position-absolute top-0 end-0 rounded-circle" style={{ transform: "translate(30%, -30%)", padding: "4px" }} onClick={() => handleRemoveAttributeImage(index, i)}><Icon icon="mingcute:delete-2-line" fontSize="14px" /></button>}
                         </div>
                       ))}
                     </div>
@@ -477,34 +505,81 @@ const ProductFormLayer = () => {
                 </div>
               </div>
             ))}
-            {formData.attributes.length === 0 && <div className="text-secondary-light p-3 text-center border radius-8 bg-light-600">No variations added yet. Click "Add Variation" to create product combinations.</div>}
+            {formData.attributes.length === 0 && <div className="text-secondary-light p-32 text-center border dashed radius-12 bg-light-600 fw-medium">No variations added yet. Click "Add Variation" to create product combinations.</div>}
           </div>
-          <div className="mt-4 pt-4 border-top">
-            <div className="d-flex align-items-center justify-content-between mb-3">
-              <h6 className="mb-0">Specifications</h6>
-              {!isView && <button type="button" className="btn btn-sm btn-primary-600 radius-8" onClick={handleAddSpecification}><Icon icon="ic:baseline-plus" /> Add Specification</button>}
+
+          {/* Specifications Section */}
+          <div className="mt-5 pt-4 border-top">
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <h6 className="mb-0 fw-bold text-lg">Product Specifications</h6>
+              {!isView && (
+                <button
+                  type="button"
+                  className="btn btn-primary-600 radius-8 px-20 py-10 d-flex align-items-center gap-2"
+                  onClick={handleAddSpecification}
+                  style={{ backgroundColor: "#003366", borderColor: "#003366" }}
+                >
+                  <Icon icon="ic:baseline-plus" fontSize="20px" />
+                  <span>Add Specification</span>
+                </button>
+              )}
             </div>
-            <div className="row gy-3">
-              {formData.specifications.map((spec, index) => (
-                <div key={index} className="col-12 d-flex align-items-center gap-3">
-                  <div className="flex-grow-1">
-                    <input type="text" className="form-control radius-8" value={spec.key} onChange={(e) => handleSpecificationChange(index, "key", e.target.value)} disabled={isView} placeholder="e.g. Style" />
+            
+            <div className="bg-light-50 p-24 radius-12 border">
+              <div className="row gy-4">
+                {formData.specifications.map((spec, index) => (
+                  <div key={index} className="col-12 d-flex align-items-center gap-3 bg-white p-16 radius-8 shadow-sm">
+                    <div className="flex-grow-1">
+                      <label className="form-label text-xs fw-bold text-secondary-600 mb-8">Property Name</label>
+                      <input type="text" className="form-control radius-8 py-10" value={spec.key} onChange={(e) => handleSpecificationChange(index, "key", e.target.value)} disabled={isView} placeholder="e.g. Style, Material, fit, etc." />
+                    </div>
+                    <div className="flex-grow-1">
+                      <label className="form-label text-xs fw-bold text-secondary-600 mb-8">Value</label>
+                      <input type="text" className="form-control radius-8 py-10" value={spec.value} onChange={(e) => handleSpecificationChange(index, "value", e.target.value)} disabled={isView} placeholder="e.g. Regular, Cotton, Slim, etc." />
+                    </div>
+                    {!isView && (
+                      <div className="pt-24">
+                        <button 
+                          type="button" 
+                          className="btn btn-danger radius-8 p-10 d-flex align-items-center justify-content-center" 
+                          onClick={() => handleRemoveSpecification(index)} 
+                          disabled={formData.specifications.length === 1} 
+                          title="Remove"
+                          style={{ minWidth: "42px", height: "42px" }}
+                        >
+                          <Icon icon="mingcute:delete-2-line" fontSize="20px" />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  <div className="flex-grow-1">
-                    <input type="text" className="form-control radius-8" value={spec.value} onChange={(e) => handleSpecificationChange(index, "value", e.target.value)} disabled={isView} placeholder="e.g. Regular Jacket" />
-                  </div>
-                  {!isView && (
-                    <button type="button" className="btn btn-icon btn-outline-danger-600 rounded-circle" onClick={() => handleRemoveSpecification(index)} disabled={formData.specifications.length === 1} title="Remove"><Icon icon="mingcute:delete-2-line" /></button>
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-          <div className="d-flex justify-content-end gap-2 mt-24">
-            <Link to="/products" className="btn btn-outline-danger-600 px-32 radius-8 justify-content-center" style={{ width: "120px" }}>Cancel</Link>
+
+          {/* Form Actions */}
+          <div className="d-flex justify-content-end gap-3 mt-40 pt-24 border-top">
+            <Link to="/products" className="btn btn-outline-secondary px-32 py-12 radius-8 fw-semibold" style={{ minWidth: "140px" }}>
+              Cancel
+            </Link>
             {!isView && hasPermission("Products", id ? "edit" : "add") && (
-              <button type="submit" className="btn btn-primary radius-8 px-18 py-11 justify-content-center" disabled={loading} style={{ backgroundColor: "#003366", borderColor: "#003366", width: "120px" }}>
-                {loading ? "Saving..." : id ? "Update" : "Save"}
+              <button 
+                type="submit" 
+                className="btn btn-primary radius-8 px-32 py-12 fw-semibold d-flex align-items-center justify-content-center gap-2" 
+                disabled={loading} 
+                style={{ backgroundColor: "#364E3D", borderColor: "#364E3D", minWidth: "140px" }}
+              >
+                {loading ? (
+                  <>
+                    <Icon icon="line-md:loading-twotone-loop" fontSize="20px" />
+                    <span>Saving...</span>
+                  </>
+                ) : (
+                  <>
+                    <Icon icon="tabler:device-floppy" fontSize="20px" />
+                    <span>{id ? "Update Product" : "Save Product"}</span>
+                  </>
+                )}
               </button>
             )}
           </div>

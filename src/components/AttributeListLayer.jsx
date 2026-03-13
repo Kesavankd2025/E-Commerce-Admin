@@ -107,14 +107,14 @@ const AttributeListLayer = () => {
                     <td>{currentPage * rowsPerPage + index + 1}</td>
                     <td><span className="text-md mb-0 fw-normal text-secondary-light">{item.name}</span></td>
                     <td>
-                      <span className={`badge ${item.isActive || item.status === "active" || item.status === 1 ? "bg-success-focus text-success-600" : "bg-danger-focus text-danger-600"} px-24 py-4 radius-4 fw-medium text-sm`}>
-                        {item.isActive || item.status === "active" || item.status === 1 ? "Active" : "Inactive"}
+                      <span className={`badge ${item.isActive || item.status === "active" || item.status === 1 || item.status ? "bg-success-focus text-success-600" : "bg-danger-focus text-danger-600"} px-24 py-4 radius-4 fw-medium text-sm`}>
+                        {item.isActive || item.status === "active" || item.status === 1 || item.status ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td>
                       <div className="d-flex align-items-center gap-2">
                         {hasPermission("Attributes", "view") && (
-                           <Link to={`/attributes/view/${item._id}`} className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
+                          <Link to={`/attributes/view/${item._id}`} className="bg-info-focus bg-hover-info-200 text-info-600 fw-medium w-40-px h-40-px d-flex justify-content-center align-items-center rounded-circle">
                             <Icon icon="majesticons:eye-line" className="menu-icon" />
                           </Link>
                         )}
@@ -144,17 +144,17 @@ const AttributeListLayer = () => {
       </div>
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal} centered>
         <Modal.Body className="text-center p-5">
-           <div className="d-flex justify-content-center mb-3">
-             <div className="bg-danger-focus rounded-circle d-flex justify-content-center align-items-center w-64-px h-64-px">
-                <Icon icon="fluent:delete-24-regular" className="text-danger-600 text-xxl" />
-             </div>
-           </div>
-           <h5 className="mb-3">Are you sure?</h5>
-           <p className="text-secondary-light mb-4">Do you want to delete this Attributes?</p>
-           <div className="d-flex justify-content-center gap-3">
-             <Button variant="outline-secondary" className="px-32" onClick={handleCloseDeleteModal}>Cancel</Button>
-             <Button variant="danger" className="px-32" onClick={handleDelete}>Delete</Button>
-           </div>
+          <div className="d-flex justify-content-center mb-3">
+            <div className="bg-danger-focus rounded-circle d-flex justify-content-center align-items-center w-64-px h-64-px">
+              <Icon icon="fluent:delete-24-regular" className="text-danger-600 text-xxl" />
+            </div>
+          </div>
+          <h5 className="mb-3">Are you sure?</h5>
+          <p className="text-secondary-light mb-4">Do you want to delete this Attributes?</p>
+          <div className="d-flex justify-content-center gap-3">
+            <Button variant="outline-secondary" className="px-32" onClick={handleCloseDeleteModal}>Cancel</Button>
+            <Button variant="danger" className="px-32" onClick={handleDelete}>Delete</Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>

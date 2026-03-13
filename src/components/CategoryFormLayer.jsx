@@ -23,7 +23,8 @@ const CategoryFormLayer = () => {
     "status": true,
     "metaTitle": "",
     "metaKeywords": "",
-    "metaDescription": ""
+    "metaDescription": "",
+    "displayOrder": ""
 });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -148,6 +149,11 @@ const CategoryFormLayer = () => {
               <label className="form-label fw-semibold">Slug</label>
               <input type="text" className="form-control radius-8" name="slug" value={formData.slug} onChange={handleChange} placeholder="Enter Slug" disabled={isView} />
               {errors.slug && <small className="text-danger">{errors.slug}</small>}
+            </div>
+            <div className="col-md-6">
+              <label className="form-label fw-semibold">Display Order</label>
+              <input type="number" className="form-control radius-8" name="displayOrder" value={formData.displayOrder} onChange={handleChange} placeholder="Enter Display Order (e.g. 1, 2, 3)" disabled={isView} />
+              {errors.displayOrder && <small className="text-danger">{errors.displayOrder}</small>}
             </div>
             <div className="col-md-12">
               <label className="form-label fw-semibold">Description</label>

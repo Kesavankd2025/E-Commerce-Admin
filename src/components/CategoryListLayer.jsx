@@ -93,6 +93,7 @@ const CategoryListLayer = () => {
             <thead>
               <tr>
                 <th scope="col" style={{ color: "black" }}>S.No</th>
+                <th scope="col" style={{ color: "black" }}>Order</th>
                 <th scope="col" style={{ color: "black" }}>Name</th>
                 <th scope="col" style={{ color: "black" }}>Status</th>
                 <th scope="col" style={{ color: "black" }}>Action</th>
@@ -105,6 +106,7 @@ const CategoryListLayer = () => {
                 data.map((item, index) => (
                   <tr key={item._id || index}>
                     <td>{currentPage * rowsPerPage + index + 1}</td>
+                    <td><span className="text-md mb-0 fw-bold text-primary-600">{item.displayOrder || 0}</span></td>
                     <td><span className="text-md mb-0 fw-normal text-secondary-light">{item.name}</span></td>
                     <td>
                       <span className={`badge ${item.isActive || item.status === "active" || item.status === 1 || item.status || item.status ? "bg-success-focus text-success-600" : "bg-danger-focus text-danger-600"} px-24 py-4 radius-4 fw-medium text-sm`}>
